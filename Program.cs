@@ -22,26 +22,25 @@ class Result
      * The function accepts INTEGER_ARRAY q as parameter.
      */
 
-    public static int minimumBribes(List<int> q)
+    public static string minimumBribes(List<int> q)
     {
         int n = 0;
-        for (int i = 0; i < q.Count; i++)
+        for (int i = q.Count -1 ; i >= 0; i--)
         {
-            int caoticCount = 0;
-            for (int j = i + 1; j < q.Count; j++)
+            //if an integer move 3 or more position from current index, it bribed more than 2 
+            if (q[i] > i + 3 ) return "Too chaotic"; //Too chaotic
+
+            // We need to count how many times RECEIVED bribed. Give a bribe is not important anymore
+            for (int j = Math.Max(0, q[i] - 2); j < i; j++)
             {
-                if (q[i] > q[j])
+                if (q[j] > q[i])
                 {
                     n++;
-                    caoticCount++;
                 }
-                if (caoticCount > 2)
-                {
-                    return -1;
-                }
-            }
+                
+            } 
         }
-        return n;
+        return n.ToString();
     }
 
 
@@ -58,14 +57,7 @@ class Result
                 List<int> q = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(qTemp => Convert.ToInt32(qTemp)).ToList();
 
                 var result = Result.minimumBribes(q);
-                if (result == -1)
-                {
-                    results.Add("Too chaotic");
-                }
-                else
-                {
-                    results.Add(result.ToString());
-                }
+                results.Add(result);
             }
 
             foreach (var item in results)
