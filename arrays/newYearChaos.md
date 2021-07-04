@@ -2,7 +2,7 @@
 
 **Not Efficient Solution**
 ```
-public static int minimumBribes(List<int> q)
+    public static int minimumBribes(List<int> q)
     {
         int n = 0;
         for (int i = 0; i < q.Count; i++)
@@ -27,7 +27,7 @@ public static int minimumBribes(List<int> q)
 
 **Efficient Solution**
 ```
-public static string minimumBribes(List<int> q)
+    public static string minimumBribes(List<int> q)
     {
         int n = 0;
         for (int i = q.Count -1 ; i >= 0; i--)
@@ -35,7 +35,7 @@ public static string minimumBribes(List<int> q)
             //if an integer move 3 or more position from current index, it bribed more than 2 
             if (q[i] > i + 3 ) return "Too chaotic"; //Too chaotic
 
-            // We need to count how many times RECEIVED bribed. Give a bribe is not important anymore
+            // We need to count how many times RECEIVED bribe. Give a bribe is not important anymore
             for (int j = Math.Max(0, q[i] - 2); j < i; j++)
             {
                 if (q[j] > q[i])

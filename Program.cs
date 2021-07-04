@@ -15,55 +15,65 @@ using hackerrank;
 
 class Result
 {
-
-    /*
-     * Complete the 'minimumBribes' function below.
-     *
-     * The function accepts INTEGER_ARRAY q as parameter.
-     */
-
-    public static string minimumBribes(List<int> q)
-    {
-        int n = 0;
-        for (int i = q.Count -1 ; i >= 0; i--)
-        {
-            //if an integer move 3 or more position from current index, it bribed more than 2 
-            if (q[i] > i + 3 ) return "Too chaotic"; //Too chaotic
-
-            // We need to count how many times RECEIVED bribed. Give a bribe is not important anymore
-            for (int j = Math.Max(0, q[i] - 2); j < i; j++)
-            {
-                if (q[j] > q[i])
-                {
-                    n++;
-                }
-                
-            } 
-        }
-        return n.ToString();
-    }
-
-
     class Solution
     {
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
-            int t = Convert.ToInt32(Console.ReadLine().Trim());
-            var results = new List<string>();
-            for (int tItr = 0; tItr < t; tItr++)
-            {
-                int n = Convert.ToInt32(Console.ReadLine().Trim());
+            int n = Convert.ToInt32(Console.ReadLine());
 
-                List<int> q = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(qTemp => Convert.ToInt32(qTemp)).ToList();
+            int[] arr = Array.ConvertAll(Console.ReadLine().Split(' '), arrTemp => Convert.ToInt32(arrTemp));
 
-                var result = Result.minimumBribes(q);
-                results.Add(result);
-            }
-
-            foreach (var item in results)
-            {
-                Console.WriteLine(item);
-            }
+            int res = minimumSwaps(arr);
+            Console.WriteLine(res);
+            Console.ReadKey();
         }
+
+        static int minimumSwaps(int[] arr)
+        {
+            int n = 0;
+            for (int i = 0; i < arr.Length; i++)
+            {
+                n = recursiveSwap(arr, i, n);
+            }
+            return n;
+        }
+
+        static int recursiveSwap(int[] arr, int i, int n)
+        {
+            if (arr[i] != i + 1)
+            {
+                int temp = arr[i];
+                arr[i] = arr[temp - 1];
+                arr[temp - 1] = temp;
+                n++;
+                if (arr[i] != i + 1)
+                {
+                    n = recursiveSwap(arr, i, n);
+                }
+            }
+            return n;
+        }
+
+        static string minimumBribes(List<int> q)
+        {
+            int n = 0;
+            for (int i = q.Count - 1; i >= 0; i--)
+            {
+                //if an integer move 3 or more position from current index, it bribed more than 2 
+                if (q[i] > i + 3) return "Too chaotic"; //Too chaotic
+
+                // We need to count how many times RECEIVED bribed. Give a bribe is not important anymore
+                for (int j = Math.Max(0, q[i] - 2); j < i; j++)
+                {
+                    if (q[j] > q[i])
+                    {
+                        n++;
+                    }
+
+                }
+            }
+            return n.ToString();
+        }
+
     }
 }
