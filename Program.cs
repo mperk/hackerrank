@@ -19,13 +19,92 @@ class Result
     {
         static void Main(string[] args)
         {
-            int n = Convert.ToInt32(Console.ReadLine());
+            string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
 
-            int[] arr = Array.ConvertAll(Console.ReadLine().Split(' '), arrTemp => Convert.ToInt32(arrTemp));
+            int m = Convert.ToInt32(firstMultipleInput[0]);
 
-            int res = minimumSwaps(arr);
-            Console.WriteLine(res);
-            Console.ReadKey();
+            int n = Convert.ToInt32(firstMultipleInput[1]);
+
+            List<string> magazine = Console.ReadLine().TrimEnd().Split(' ').ToList();
+
+            List<string> note = Console.ReadLine().TrimEnd().Split(' ').ToList();
+
+            Console.WriteLine(checkMagazine(magazine, note));
+            Console.ReadLine();
+
+        }
+
+        static string checkMagazine(List<string> magazine, List<string> note)
+        {
+            Dictionary<string, int> dicMagazine = new Dictionary<string, int>();
+            foreach (var item in magazine)
+            {
+                if (!dicMagazine.ContainsKey(item))
+                    dicMagazine.Add(item, 1);
+                else dicMagazine[item] += 1;
+            }
+
+            foreach (var item in note)
+            {
+                if (dicMagazine.ContainsKey(item))
+                {
+                    if (dicMagazine[item] > 0)
+                    {
+                        dicMagazine[item] -= 1;
+                    }
+                    else
+                    {
+                        return "No";
+                    }
+                }
+                else
+                {
+                    return "No";
+                }
+            }
+            return "Yes";
+        }
+
+        public static string checkMagazine2(List<string> magazine, List<string> note)
+        {
+            foreach (var item in note)
+            {
+                if (magazine.Remove(item) == false)
+                {
+                    return "No";
+                }
+            }
+            return "Yes";
+        }
+
+
+        // not work
+        static long arrayManipulation(int n, List<List<int>> queries)
+        {
+            var result = new long[n, n];
+            long max = 0;
+            for (int i = 0; i < queries.Count; i++)
+            {
+                int k = i + 1;
+                for (int j = queries[i][0] - 1; j < queries[i][1]; j++)
+                {
+                    if (result[k - 1, j] == 0 && i != 0)
+                    {
+                        int z = k - 1;
+                        while (z >= 1 && result[z, j] == 0)
+                        {
+                            z--;
+                        }
+                        result[k, j] = result[z, j] + queries[i][2];
+                    }
+                    else
+                    {
+                        result[k, j] = result[k - 1, j] + queries[i][2];
+                    }
+                    if (result[k, j] > max) max = result[k, j];
+                }
+            }
+            return max;
         }
 
         static int minimumSwaps(int[] arr)
