@@ -19,19 +19,48 @@ class Result
     {
         static void Main(string[] args)
         {
-            string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+            int q = Convert.ToInt32(Console.ReadLine().Trim());
 
-            int m = Convert.ToInt32(firstMultipleInput[0]);
+            for (int qItr = 0; qItr < q; qItr++)
+            {
+                string s1 = Console.ReadLine();
 
-            int n = Convert.ToInt32(firstMultipleInput[1]);
+                string s2 = Console.ReadLine();
 
-            List<string> magazine = Console.ReadLine().TrimEnd().Split(' ').ToList();
+                string result = twoStrings(s1, s2);
 
-            List<string> note = Console.ReadLine().TrimEnd().Split(' ').ToList();
-
-            Console.WriteLine(checkMagazine(magazine, note));
+                Console.WriteLine(result);
+            }
             Console.ReadLine();
+        }
 
+        public static string twoStrings(string s1, string s2)
+        {
+            string result = "NO";
+            Dictionary<char, short> s1Dic = new Dictionary<char, short>();
+            foreach (var item in s1)
+            {
+                if (s1Dic.ContainsKey(item))
+                {
+                    s1Dic[item] += 1;
+                }
+                else
+                {
+                    s1Dic.Add(item, 1);
+                }
+            }
+            foreach(var item in s2)
+            {
+                if (s1Dic.ContainsKey(item))
+                {
+                    if (s1Dic[item] > 0)
+                    {
+                        result = "YES";
+                        return result;
+                    }
+                }
+            }
+            return result;
         }
 
         static string checkMagazine(List<string> magazine, List<string> note)
@@ -76,7 +105,6 @@ class Result
             }
             return "Yes";
         }
-
 
         // not work
         static long arrayManipulation(int n, List<List<int>> queries)
