@@ -19,19 +19,128 @@ class Result
     {
         static void Main(string[] args)
         {
-            int q = Convert.ToInt32(Console.ReadLine().Trim());
+            int n = Convert.ToInt32(Console.ReadLine().Trim());
 
-            for (int qItr = 0; qItr < q; qItr++)
+            List<int> a = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(aTemp => Convert.ToInt32(aTemp)).ToList();
+
+            countSwaps(a);
+        }
+
+        static void countSwaps(List<int> a)
+        {
+            int count = 0;
+            for (int i = 0; i < a.Count; i++)
             {
-                string s1 = Console.ReadLine();
-
-                string s2 = Console.ReadLine();
-
-                string result = twoStrings(s1, s2);
-
-                Console.WriteLine(result);
+                for (int j = 0; j < a.Count - 1; j++)
+                {
+                    // Swap adjacent elements if they are in decreasing order
+                    if (a[j] > a[j + 1])
+                    {
+                        var temp = a[j];
+                        a[j] = a[j + 1];
+                        a[j + 1] = temp;
+                        count++;
+                    }
+                }
             }
-            Console.ReadLine();
+            Console.WriteLine($"Array is sorted in {count} swaps.");
+            Console.WriteLine($"First Element: {a[0]}");
+            Console.WriteLine($"Last Element: {a[a.Count - 1]}");
+        }
+
+        static long countTriplets3(List<long> arr, long r)
+        {
+            //var d1 = arr.Distinct().ToDictionary(Key => Key, Value => 0L);
+            var pairs = arr.Distinct().ToDictionary(Key => Key, Value => new long[] { 0, 0, 0 });
+            //var triplets = new Dictionary<long, long[]>();
+            long triplets = 0;
+
+            for (int i = 0; i < arr.Count; i++)
+            {
+                var current = arr[i];
+                if (pairs.ContainsKey(arr[i] / r)) pairs[current / r][0] = current;
+                if (current % r == 0)
+                {
+                    var candidates = pairs.Select(x => x.Value)?.Where(x => x[0] == (current / r));
+                    foreach (var item in candidates)
+                    {
+                        item[1] = current;
+                        ++item[2];
+                    }
+                }
+            }
+
+            var result = pairs.Where(x => x.Value[0] != 0 && x.Value[1] != 0).Sum(x => x.Value[2]);
+            return result;
+        }
+
+        private static long countTriplets(List<long> arr, long r)
+        {
+            long count = 0;
+            var d1 = arr.Distinct().ToDictionary(Key => Key, Value => 0L); // count occurrence of value in array
+            var d2 = new Dictionary<long, long>(d1); // 
+
+            foreach (var i in arr.Reverse<long>())
+            {
+                long ir = i * r;
+
+                if (d2.TryGetValue(ir, out long d2ir)) count += d2ir;
+
+                if (d1.TryGetValue(ir, out long d1ir)) d2[i] += d1ir;
+
+                d1[i]++;
+            }
+
+            return count;
+        }
+
+        static long countTriplets2(List<long> arr, long r)
+        {
+            var pairs = new Dictionary<long, long[]>();
+            long triplets = 0;
+
+            foreach (var n in arr)
+            {
+                if (!pairs.ContainsKey(n))
+                {
+                    pairs.Add(n, new long[] { 0, 0 });
+                }
+
+                if (n % r == 0 && pairs.ContainsKey(n / r))
+                {
+                    var prevPair = pairs[n / r];
+                    triplets += prevPair[1];
+                    pairs[n][1] += prevPair[0];
+                }
+
+                pairs[n][0]++;
+            }
+
+            return triplets;
+        }
+
+        static long countTriplets4(List<long> arr, long r)
+        {
+            var pairs = arr.Distinct().ToDictionary(Key => Key, Value => new long[] { 0, 0 });
+            long triplets = 0;
+
+            foreach (var n in arr)
+            {
+                if (n % r == 0 && pairs.ContainsKey(n / r))
+                {
+                    var prevPair = pairs[n / r];
+                    triplets += prevPair[1];
+                    pairs[n][1] += prevPair[0];
+                }
+                pairs[n][0]++;
+            }
+
+            return triplets;
+        }
+
+        public static int sherlockAndAnagrams(string s)
+        {
+            return 0;
         }
 
         public static string twoStrings(string s1, string s2)
