@@ -1,4 +1,4 @@
-#  Mark And Toys
+#  Mark-And-Toys
 
 **Solution**
 ```

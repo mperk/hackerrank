@@ -19,11 +19,91 @@ class Result
     {
         static void Main(string[] args)
         {
-            int n = Convert.ToInt32(Console.ReadLine().Trim());
+            string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
 
-            List<int> a = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(aTemp => Convert.ToInt32(aTemp)).ToList();
+            int n = Convert.ToInt32(firstMultipleInput[0]);
 
-            countSwaps(a);
+            int d = Convert.ToInt32(firstMultipleInput[1]);
+
+            List<int> expenditure = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(expenditureTemp => Convert.ToInt32(expenditureTemp)).ToList();
+
+            int result = activityNotifications(expenditure, d);
+
+            Console.WriteLine(result);
+            Console.ReadLine();
+        }
+
+        static int activityNotifications(List<int> expenditure, int d)
+        {
+            int notification = 0;
+            for (int i = 0; i < expenditure.Count - d - 1; i++)
+            {
+                var subDays = expenditure.GetRange(i, d);
+                var sortedList = new SortedList(subDays.Distinct().ToDictionary(x => x));
+                int median = 0;
+                if (d % 2 == 0)
+                {
+                    _ = sortedList[d / 2];
+                    median = (subDays[d / 2] + subDays[d / 2 + 1]) / 2;
+                }
+                else
+                {
+                    median = subDays[d / 2 + 1];
+                }
+
+                if (expenditure[i + d] < median * 2)
+                {
+                    notification++;
+                }
+            }
+            return notification;
+        }
+
+        static int activityNotifications2(List<int> expenditure, int d)
+        {
+            int notification = 0;
+            for (int i = 0; i < expenditure.Count - d - 1; i++)
+            {
+                var subDays = expenditure.GetRange(i, d);
+                subDays.Sort();
+                int median = 0;
+                
+                if(d % 2 == 0)
+                {
+                    median = (subDays[d / 2] + subDays[d / 2 + 1]) / 2;
+                }
+                else
+                {
+                    median = subDays[d / 2 + 1];
+                }
+
+                if (expenditure[d] < median * 2)
+                {
+                    notification++;
+                }
+            }
+            return notification;
+        }
+
+        static int maximumToys(List<int> prices, int k)
+        {
+            prices.Sort();
+            int count = 0;
+            int total = 0;
+            foreach (var item in prices)
+            {
+                int temp = total + item;
+                if (temp < k) 
+                {
+                    total += item;
+                    count++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return count;
         }
 
         static void countSwaps(List<int> a)

@@ -1,4 +1,4 @@
-#  Two Strings
+#  Two-Strings
 
 **Not Efficient Solution**
 ```

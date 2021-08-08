@@ -1,4 +1,4 @@
-#  Ransom Note
+#  Ransom-Note
 
 **Not Efficient Solution**
 ```
