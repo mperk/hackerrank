@@ -27,15 +27,15 @@ class Solution
 {
     static void Main(string[] args)
     {
-        string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+        string[] nGoal = Console.ReadLine().Split(' ');
 
-        int n = Convert.ToInt32(firstMultipleInput[0]);
+        int n = Convert.ToInt32(nGoal[0]);
 
-        int k = Convert.ToInt32(firstMultipleInput[1]);
+        long goal = Convert.ToInt64(nGoal[1]);
 
-        List<int> arr = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt32(arrTemp)).ToList();
+        long[] machines = Array.ConvertAll(Console.ReadLine().Split(' '), machinesTemp => Convert.ToInt64(machinesTemp));
 
-        int result = pairs(k, arr);
+        long result = minTime(machines, goal);
 
         //foreach (var result in results)
         //{
@@ -45,13 +45,92 @@ class Solution
         //Console.ReadLine();
     }
 
+    static long minTime(long[] machines, long goal)
+    {
+        long min = goal * machines.Min() / machines.Count();
+        long max = goal * machines.Max() / machines.Count();
+        while (min < max)
+        {
+            long mid = (min + max) / 2;
+            var total = machines.Sum(x => mid / x);
+            if (total < goal)
+            {
+                min = mid + 1;
+            }
+            else
+            {
+                max = mid;
+            }
+        }
+        return max;
+    }
+
+    static long minTimeNotEfficient(long[] machines, long goal)
+    {
+        long totalDays = 0L;
+        long day = machines.Min();
+        long min = machines.Min();
+        while (true)
+        {
+            totalDays = machines.Sum(x => day / x);
+            if (goal <= totalDays)
+            {
+                break;
+            }
+            day += min;
+        }
+
+        if (goal < totalDays)
+        {
+            day -= min;
+            while (true)
+            {
+                day++;
+                totalDays = machines.Sum(x => day / x);
+                if (goal <= totalDays)
+                {
+                    break;
+                }
+            }
+        }
+
+        return day;
+    }
+
+    static long triplets(int[] a, int[] b, int[] c)
+    {
+        long count = 0L;
+        a = a.Distinct().OrderBy(x => x).ToArray();
+        b = b.Distinct().OrderBy(x => x).ToArray();
+        c = c.Distinct().OrderBy(x => x).ToArray();
+
+        long aCount = 0L;
+        long cCount = 0L;
+        for (int i = 0; i < b.Length; i++)
+        {
+            while (aCount < a.Length && a[aCount] <= b[i])
+            {
+                aCount++;
+            }
+
+            while (cCount < c.Length && c[cCount] <= b[i])
+            {
+                cCount++;
+            }
+
+            count += aCount * cCount;
+        }
+
+        return count;
+    }
+
     static int pairs(int k, List<int> arr)
     {
         int count = 0;
         var dic = arr.Distinct().Select((x, i) => new { item = x, index = i }).ToDictionary(x => x.item, x => x.index);
         for (int i = 0; i < arr.Count; i++)
         {
-            if(dic.ContainsKey(arr[i] - k))
+            if (dic.ContainsKey(arr[i] - k))
             {
                 count++;
             }
@@ -80,7 +159,7 @@ class Solution
         for (int i = 0; i < cost.Count - 1; i++)
         {
             int index = cost.IndexOf(money - cost[i], i + 1);
-            if(index > -1)
+            if (index > -1)
             {
                 return $"{i + 1} {index + 1}";
             }
@@ -111,7 +190,7 @@ class Solution
         for (int i = 0; i < c.Length; i++)
         {
             var element = kDic[i % k];
-            if(element[0] == 0)
+            if (element[0] == 0)
             {
                 element[1] = cReverse[i];
             }
@@ -131,7 +210,7 @@ class Solution
         int luck = 0;
         var importants = contests.Where(x => x.Last() == 1).Select(x => x.First()).OrderByDescending(x => x).ToList();
         var unimportantsSum = contests.Where(x => x.Last() == 0).Sum(x => x.First());
-        if(k > importants.Count())
+        if (k > importants.Count())
         {
             k = importants.Count();
         }
@@ -154,7 +233,7 @@ class Solution
         for (int i = 0; i < arr.Count - 1; i++)
         {
             int tempDiff = Math.Abs(arr[i] - arr[i + 1]);
-            if(tempDiff < minDifference)
+            if (tempDiff < minDifference)
             {
                 minDifference = tempDiff;
             }
@@ -172,11 +251,11 @@ class Solution
             int index = s1.IndexOf(s2[i]);
             if (index > -1)
             {
-                if (commonList.Any(x=> x.Value == index))
+                if (commonList.Any(x => x.Value == index))
                 {
                     int existingLastIndex = commonList.Where(x => x.Value == index).OrderBy(x => x.Value).Last().Value;
-                    int lastIndex = s1.IndexOf(s2[i], existingLastIndex+ 1);
-                    if(lastIndex > -1)
+                    int lastIndex = s1.IndexOf(s2[i], existingLastIndex + 1);
+                    if (lastIndex > -1)
                     {
                         commonList.Add(new KeyValuePair<char, int>(s2[i], lastIndex));
                     }
@@ -191,7 +270,7 @@ class Solution
         var willRemove = new List<int>();
         for (int i = 0; i < commonList.Count() - 1; i++)
         {
-            if(commonList[i].Value > commonList[i + 1].Value)
+            if (commonList[i].Value > commonList[i + 1].Value)
             {
                 willRemove.Add(i);
             }
@@ -217,7 +296,7 @@ class Solution
                 else
                     C[i, j] = Math.Max(C[i, j - 1], C[i - 1, j]);
             }
-        return C[a.Length,b.Length];
+        return C[a.Length, b.Length];
     }
 
     static long substrCount(int n, string s)
@@ -248,7 +327,7 @@ class Solution
 
         for (int i = 1; i < slist.Count - 1; i++)
         {
-            if(slist[i].Value == 1 && slist[i -1].Key == slist[i+1].Key)
+            if (slist[i].Value == 1 && slist[i - 1].Key == slist[i + 1].Key)
             {
                 count += Math.Min(slist[i - 1].Value, slist[i + 1].Value);
             }
