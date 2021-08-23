@@ -35,10 +35,25 @@
         int globalMax = Int32.MinValue;
         for (int i = 0; i < arr.Length; i++)
         {
-            localMax = Math.Max(0, arr[i] + localMax);
+            localMax = Math.Max(arr[i], arr[i] + localMax);
             globalMax = Math.Max(globalMax, localMax);
         }
         return globalMax;
+    }
+
+    //Max array sum non-adjacent
+    static int maxSubsetSum(int[] arr)
+    {
+        int prevWith = 0;
+        int prevWithout = 0;
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            int oldPrevWithout = prevWithout;
+            prevWithout = Math.Max(prevWithout, prevWith);
+            prevWith = arr[i] + oldPrevWithout;
+        }
+        return Math.Max(prevWithout, prevWith);
     }
 ```
 
