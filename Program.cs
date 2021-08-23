@@ -27,15 +27,11 @@ class Solution
 {
     static void Main(string[] args)
     {
-        string[] nGoal = Console.ReadLine().Split(' ');
+        int n = Convert.ToInt32(Console.ReadLine());
 
-        int n = Convert.ToInt32(nGoal[0]);
+        int[] arr = Array.ConvertAll(Console.ReadLine().Split(' '), arrTemp => Convert.ToInt32(arrTemp));
 
-        long goal = Convert.ToInt64(nGoal[1]);
-
-        long[] machines = Array.ConvertAll(Console.ReadLine().Split(' '), machinesTemp => Convert.ToInt64(machinesTemp));
-
-        long result = minTime(machines, goal);
+        int result = maxSubsetSum(arr);
 
         //foreach (var result in results)
         //{
@@ -43,6 +39,32 @@ class Solution
         //}
         Console.WriteLine(result);
         //Console.ReadLine();
+    }
+
+    static int maxSubsetSum(int[] arr)
+    {
+        int prevWith = 0;
+        int prevWithout = 0;
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            int oldPrevWithout = prevWithout;
+            prevWithout = Math.Max(prevWithout, prevWith);
+            prevWith = arr[i] + oldPrevWithout;
+        }
+        return Math.Max(prevWithout, prevWith);
+    }
+
+    static int kadanesAlgorithm(int[] arr)
+    {
+        int localMax = 0;
+        int globalMax = Int32.MinValue;
+        for (int i = 0; i < arr.Length; i++)
+        {
+            localMax = Math.Max(arr[i], arr[i] + localMax);
+            globalMax = Math.Max(globalMax, localMax);
+        }
+        return globalMax;
     }
 
     static long minTime(long[] machines, long goal)

@@ -22,23 +22,3 @@
         return max;
     }
 ```
-
-**Not Efficient Solution**
-```
-
-    static long minTime(long[] machines, long goal)
-    {
-        long totalDays = 0L;
-        long day = machines.Min();
-        while (true)
-        {
-            totalDays += machines.Count(x => day % x == 0);
-            if(goal <= totalDays)
-            {
-                break;
-            }
-            day++;
-        }
-        return day;        
-    }
-```
