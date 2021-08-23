@@ -1,4 +1,4 @@
-#  Cheet
+#  Cheat-Sheet
 
 **Triple-Sum**
 ```
@@ -114,8 +114,6 @@
         return notification;
     }
 ```
-
-
 
 // lcm: least common multiples
 // gcd: greatest common divisor
