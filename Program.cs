@@ -27,17 +27,16 @@ class Solution
 {
     static void Main(string[] args)
     {
-        int n = Convert.ToInt32(Console.ReadLine().Trim());
+        int t = Convert.ToInt32(Console.ReadLine().Trim());
 
-        List<int> arr = new List<int>();
-
-        for (int i = 0; i < n; i++)
+        for (int tItr = 0; tItr < t; tItr++)
         {
-            int arrItem = Convert.ToInt32(Console.ReadLine().Trim());
-            arr.Add(arrItem);
-        }
+            string s = Console.ReadLine();
 
-        long result = candies(n, arr);
+            string result = isBalanced(s);
+
+            Console.WriteLine(result);
+        }
 
         //foreach (var result in results)
         //{
@@ -45,6 +44,58 @@ class Solution
         //}
         //Console.WriteLine(result);
         //Console.ReadLine();
+    }
+
+    static string isBalanced(string s)
+    {
+        var dic = new Dictionary<string, string>();
+        dic["("] = ")";
+        dic["["] = "]";
+        dic["{"] = "}";
+
+        int l = s.Length;
+        if (l % 2 != 0) return "NO";
+
+        LinkedList<string> ll = new LinkedList<string>();
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (dic.ContainsKey(s[i].ToString()))
+            {
+                ll.AddLast(s[i].ToString());
+            }
+            else
+            {
+                if (ll.Count == 0) return "NO";
+
+                if(dic[ll.Last()] == s[i].ToString())
+                {
+                    ll.RemoveLast();
+                }
+                else
+                {
+                    return "NO";
+                }
+            }
+        }
+        if(ll.Count == 0) return "YES";
+        else return "NO";
+    }
+
+    static string recBalance(string s, Dictionary<string, string> dic)
+    {
+        var result = string.Empty;
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (dic.ContainsKey(s[i].ToString()))
+            {
+                int index = s.IndexOf(dic[s[i].ToString()]);
+                var subS = s.Substring(i + 1, index - i - 1);
+                result = recBalance(subS, dic);
+
+                i += index;
+            }
+        }
+        return "";
     }
 
     static long candies(int n, List<int> arr)
