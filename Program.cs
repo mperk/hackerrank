@@ -29,21 +29,44 @@ class Solution
     {
         int t = Convert.ToInt32(Console.ReadLine().Trim());
 
+        var q = new List<string>();
         for (int tItr = 0; tItr < t; tItr++)
         {
             string s = Console.ReadLine();
-
-            string result = isBalanced(s);
-
-            Console.WriteLine(result);
+            q.Add(s);
         }
 
+        aTaleOfTwoStack(q);
         //foreach (var result in results)
         //{
         //    Console.WriteLine(result);
         //}
         //Console.WriteLine(result);
         //Console.ReadLine();
+    }
+
+    static void aTaleOfTwoStack(List<string> q)
+    {
+        var lifo = new LinkedList<string>();
+        var fifo = new LinkedList<string>();
+        for (int i = 0; i < q.Count; i++)
+        {
+            if (q[i].StartsWith("1") && q[i].Contains(" "))
+            {
+                string ee = q[i].Split(" ")[1];
+                fifo.AddLast(ee);
+                lifo.AddFirst(ee);
+            }
+            else if (q[i].Equals("2"))
+            {
+                fifo.RemoveFirst();
+                lifo.RemoveFirst();
+            }
+            else if ((q[i].Equals("3")))
+            {
+                Console.WriteLine(fifo.ElementAt(0));
+            }
+        }
     }
 
     static string isBalanced(string s)
@@ -67,7 +90,7 @@ class Solution
             {
                 if (ll.Count == 0) return "NO";
 
-                if(dic[ll.Last()] == s[i].ToString())
+                if (dic[ll.Last()] == s[i].ToString())
                 {
                     ll.RemoveLast();
                 }
@@ -77,25 +100,8 @@ class Solution
                 }
             }
         }
-        if(ll.Count == 0) return "YES";
+        if (ll.Count == 0) return "YES";
         else return "NO";
-    }
-
-    static string recBalance(string s, Dictionary<string, string> dic)
-    {
-        var result = string.Empty;
-        for (int i = 0; i < s.Length; i++)
-        {
-            if (dic.ContainsKey(s[i].ToString()))
-            {
-                int index = s.IndexOf(dic[s[i].ToString()]);
-                var subS = s.Substring(i + 1, index - i - 1);
-                result = recBalance(subS, dic);
-
-                i += index;
-            }
-        }
-        return "";
     }
 
     static long candies(int n, List<int> arr)
@@ -113,11 +119,11 @@ class Solution
                 dic[i] = 1;
             }
         }
-        if(arr.Count > 2)
+        if (arr.Count > 2)
         {
             for (int i = arr.Count - 2; i >= 0; i--)
             {
-                if(arr[i] > arr[i + 1])
+                if (arr[i] > arr[i + 1])
                 {
                     dic[i] = Math.Max(dic[i], dic[i + 1] + 1);
                 }
