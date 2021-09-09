@@ -27,22 +27,45 @@ class Solution
 {
     static void Main(string[] args)
     {
-        int t = Convert.ToInt32(Console.ReadLine().Trim());
+        int n = Convert.ToInt32(Console.ReadLine().Trim());
 
-        var q = new List<string>();
-        for (int tItr = 0; tItr < t; tItr++)
-        {
-            string s = Console.ReadLine();
-            q.Add(s);
-        }
+        List<int> h = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(hTemp => Convert.ToInt32(hTemp)).ToList();
 
-        aTaleOfTwoStack(q);
+        long result = largestRectangle(h);
         //foreach (var result in results)
         //{
         //    Console.WriteLine(result);
         //}
-        //Console.WriteLine(result);
+        Console.WriteLine(result);
         //Console.ReadLine();
+    }
+
+    static long largestRectangle(List<int> h)
+    {
+        long result = h[0];
+        for (int i = 1; i < h.Count - 1; i++)
+        {
+            int count = 1;
+            for (int j = i - 1; j >= 0 ; j--)
+            {
+                if (h[j] >= h[i])
+                {
+                    count++;
+                }
+                else break;
+            }
+
+            for (int k = i + 1; k < h.Count; k++)
+            {
+                if (h[k] >= h[i])
+                {
+                    count++;
+                }
+                else break;
+            }
+            result = Math.Max(result, count * h[i]);
+        }
+        return result;
     }
 
     static void aTaleOfTwoStack(List<string> q)
