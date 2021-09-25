@@ -12,7 +12,8 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System;
 using hackerrank;
-
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 public static class Extensions
 {
@@ -27,17 +28,234 @@ class Solution
 {
     static void Main(string[] args)
     {
-        int n = Convert.ToInt32(Console.ReadLine().Trim());
+        int numbersCount = Convert.ToInt32(Console.ReadLine().Trim());
 
-        List<int> h = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(hTemp => Convert.ToInt32(hTemp)).ToList();
+        List<int> numbers = new List<int>();
 
-        long result = largestRectangle(h);
+        for (int i = 0; i < numbersCount; i++)
+        {
+            int numbersItem = Convert.ToInt32(Console.ReadLine().Trim());
+            numbers.Add(numbersItem);
+        }
+
+        int queriesRows = Convert.ToInt32(Console.ReadLine().Trim());
+        int queriesColumns = Convert.ToInt32(Console.ReadLine().Trim());
+
+        List<List<int>> queries = new List<List<int>>();
+
+        for (int i = 0; i < queriesRows; i++)
+        {
+            queries.Add(Console.ReadLine().TrimEnd().Split(' ').ToList().Select(queriesTemp => Convert.ToInt32(queriesTemp)).ToList());
+        }
+
+        List<long> result = findSum(numbers, queries);
+
+        Console.WriteLine(String.Join("\n", result));
+
         //foreach (var result in results)
         //{
         //    Console.WriteLine(result);
         //}
-        Console.WriteLine(result);
+        //Console.WriteLine(result);
         //Console.ReadLine();
+    }
+
+    static List<long> findSum(List<int> numbers, List<List<int>> queries)
+    {
+        var result = new List<long>();
+        foreach (var q in queries)
+        {
+            long sum = 0L;
+            for (int i = q[0] - 1; i < q[1]; i++)
+            {
+                if (numbers[i] == 0)
+                {
+                    sum += q[2];
+                }
+                else
+                {
+                    sum += numbers[i];
+                }
+            }
+
+            //var subArr = numbers.GetRange(q[0] - 1, q[1] - q[0] + 1);
+            //long sum = 0L;
+            //foreach (var item in subArr)
+            //{
+            //    if(item == 0)
+            //    {
+            //        sum += q[2];
+            //    }
+            //    else
+            //    {
+            //        sum += item;
+            //    }
+            //}
+            //long countZero = subArr.Count(x => x == 0);
+            //long sum = (long)subArr.Select(x=>(long)x).Sum() + ((long)countZero * q[2]);
+            result.Add(sum);
+        }
+        return result;
+    }
+
+    static List<string> mostActive(List<string> customers)
+    {
+        var cDic = new Dictionary<string, int>();
+        foreach (var item in customers)
+        {
+            if (cDic.ContainsKey(item))
+            {
+                cDic[item]++;
+            }
+            else
+            {
+                cDic[item] = 1;
+            }
+        }
+        var activeCustomers = cDic.Where(x => (x.Value / customers.Count()) > 0.05).Select(x => x.Key).OrderBy(x => x) ;
+        return activeCustomers.ToList();
+    }
+
+    static int minimumMoves(List<string> grid, int startX, int startY, int goalX, int goalY)
+    {
+        var queue = new LinkedList<KeyValuePair<int, int>>();
+        queue.AddLast(new KeyValuePair<int, int>(startX, startY));
+        int xLength = grid.First().Length;
+        int yLength = grid.Count;
+        var x = string.Concat(Enumerable.Repeat("W", xLength));
+        var matrixColor = new List<string>(Enumerable.Repeat(x,yLength));
+        var xM = Enumerable.Repeat(new KeyValuePair<int, int>(-1, -1), yLength);
+        var matrix = new List<List<KeyValuePair<int, int>>>();
+        for (int i = 0; i < xLength; i++)
+        {
+            matrix.Add(xM.ToList());
+        }
+
+        var destination = new KeyValuePair<int, int>(goalX, goalY);
+
+        int l = queue.Count();
+        for (int qi = 0; qi < l; qi++)
+        {
+            var item = queue.ElementAt(qi);
+
+            if (queue.Contains(destination))
+            {
+                break;
+            }
+
+            for (int i = 0; i < yLength; i++)
+            {
+                if (grid[item.Key][i] == 'X')
+                {
+                    break;
+                }
+                var node = new KeyValuePair<int, int>(item.Key, i);
+                if (!queue.Contains(node))
+                {
+                    queue.AddLast(node);
+                }
+
+                if (matrixColor[item.Key][i] == 'W')
+                {
+                    //change the color
+                    var aStringBuilder = new StringBuilder(matrixColor[item.Key]);
+                    aStringBuilder.Remove(i, 1);
+                    aStringBuilder.Insert(i, "G");
+                    matrixColor[item.Key] = aStringBuilder.ToString();
+
+                    matrix.ElementAt(item.Key).RemoveAt(i);
+                    matrix.ElementAt(item.Key).Insert(i, new KeyValuePair<int, int>(item.Key, item.Value));
+                }
+            }
+            for (int j = 0; j < xLength; j++)
+            {
+                if (grid[j][item.Value] == 'X')
+                {
+                    break;
+                }
+                var node = new KeyValuePair<int, int>(j, item.Value);
+                if (!queue.Contains(node))
+                {
+                    queue.AddLast(node);
+                }
+
+                if (matrixColor[j][item.Value] == 'W')
+                {
+                    //change the color
+                    var aStringBuilder = new StringBuilder(matrixColor[j]);
+                    aStringBuilder.Remove(item.Value, 1);
+                    aStringBuilder.Insert(item.Value, "G");
+                    matrixColor[j] = aStringBuilder.ToString();
+
+                    matrix.ElementAt(j).RemoveAt(item.Value);
+                    matrix.ElementAt(j).Insert(item.Value, new KeyValuePair<int, int>(item.Key, item.Value));
+                }
+            }
+            l = queue.Count();
+        }
+
+        int count = 0;
+        int dX = goalX;
+        int dY = goalY;
+        while (true)
+        {
+            count++;
+            var temp = matrix[dX][dY];
+            dX = temp.Key;
+            dY = temp.Value;
+            if(dX == startX && dY == startY)
+            {
+                break;
+            }
+        }
+       
+        return count;
+    }
+
+    static long[] riddle(List<long> arr)
+    {
+        var result = new List<long>();
+
+        var subArr = new LinkedList<List<long>>();
+        var minDic = arr.Select((x, i) => new { item = x, index = i }).ToDictionary(x => x.index, x => x.item);
+        long max = arr.FirstOrDefault();
+        for (int j = 0; j < arr.Count; j++)
+        {
+            var temp = arr[j];
+            subArr.AddLast(new List<long> { temp });
+            if (max < temp)
+            {
+                max = temp;
+            }
+        }
+        result.Add(max);
+
+        for (int i = 2; i <= arr.Count; i++)
+        {
+            subArr.RemoveLast();
+            minDic.Remove(minDic.Count - 1);
+            max = 0;
+            int length = subArr.First().Count();
+            if (length < arr.Count())
+            {
+                for (int j = 0; j < subArr.Count(); j++)
+                {
+                    var temp = arr[length + j];
+                    subArr.ElementAt(j).Add(temp);
+                    if (minDic[j] > temp)
+                    {
+                        minDic[j] = temp;
+                    }
+                    if (minDic[j] > max)
+                    {
+                        max = minDic[j];
+                    }
+                }
+            }
+
+            result.Add(max);
+        }
+        return result.ToArray();
     }
 
     static long largestRectangle(List<int> h)
@@ -46,7 +264,7 @@ class Solution
         for (int i = 1; i < h.Count - 1; i++)
         {
             int count = 1;
-            for (int j = i - 1; j >= 0 ; j--)
+            for (int j = i - 1; j >= 0; j--)
             {
                 if (h[j] >= h[i])
                 {
@@ -938,4 +1156,16 @@ class Solution
         return n.ToString();
     }
 
+}
+
+
+class Point
+{
+    int x { get; set; }
+    int y { get; set; }
+    public Point(int _x, int _y)
+    {
+        x = _x;
+        y = _y;
+    }
 }
