@@ -24,31 +24,37 @@ public static class Extensions
     }
 }
 
+public class MaxAndValue
+{
+    public int Value { get; set; }
+    public int Max { get; set; }
+
+    public MaxAndValue(int m, int v)
+    {
+        Max = m;
+        Value = v;
+    }
+    public MaxAndValue()
+    {
+        
+    }
+}
+
 class Solution
 {
     static void Main(string[] args)
     {
-        int numbersCount = Convert.ToInt32(Console.ReadLine().Trim());
+        int n = Convert.ToInt32(Console.ReadLine().Trim());
 
-        List<int> numbers = new List<int>();
+        List<string> ops = new List<string>();
 
-        for (int i = 0; i < numbersCount; i++)
+        for (int i = 0; i < n; i++)
         {
-            int numbersItem = Convert.ToInt32(Console.ReadLine().Trim());
-            numbers.Add(numbersItem);
+            string opsItem = Console.ReadLine();
+            ops.Add(opsItem);
         }
 
-        int queriesRows = Convert.ToInt32(Console.ReadLine().Trim());
-        int queriesColumns = Convert.ToInt32(Console.ReadLine().Trim());
-
-        List<List<int>> queries = new List<List<int>>();
-
-        for (int i = 0; i < queriesRows; i++)
-        {
-            queries.Add(Console.ReadLine().TrimEnd().Split(' ').ToList().Select(queriesTemp => Convert.ToInt32(queriesTemp)).ToList());
-        }
-
-        List<long> result = findSum(numbers, queries);
+        List<int> result = getMax(ops);
 
         Console.WriteLine(String.Join("\n", result));
 
@@ -58,6 +64,41 @@ class Solution
         //}
         //Console.WriteLine(result);
         //Console.ReadLine();
+
+    }
+
+    static List<int> getMax(List<string> operations)
+    {
+        var resultMax = new LinkedList<int>();
+        var result = new LinkedList<int>();
+       
+        foreach (var item in operations)
+        {
+            if (item.StartsWith("1"))
+            {
+                int value = Convert.ToInt32(item.Split(' ')[1]);
+                if(resultMax.Count() > 0)
+                {
+                    value = Math.Max(resultMax.Last(), value);
+                }
+                resultMax.AddLast(value);
+            }
+            else if (item.StartsWith("2"))
+            {
+                if (resultMax.Count() > 0)
+                {
+                    resultMax.RemoveLast();
+                }
+            }
+            else if (item.StartsWith("3"))
+            {
+                if(resultMax.Count() > 0)
+                {
+                    result.AddLast(resultMax.Last());
+                }
+            }
+        }
+        return result.ToList();
     }
 
     static List<long> findSum(List<int> numbers, List<List<int>> queries)
@@ -112,7 +153,7 @@ class Solution
                 cDic[item] = 1;
             }
         }
-        var activeCustomers = cDic.Where(x => (x.Value / customers.Count()) > 0.05).Select(x => x.Key).OrderBy(x => x) ;
+        var activeCustomers = cDic.Where(x => (x.Value / customers.Count()) > 0.05).Select(x => x.Key).OrderBy(x => x);
         return activeCustomers.ToList();
     }
 
@@ -123,7 +164,7 @@ class Solution
         int xLength = grid.First().Length;
         int yLength = grid.Count;
         var x = string.Concat(Enumerable.Repeat("W", xLength));
-        var matrixColor = new List<string>(Enumerable.Repeat(x,yLength));
+        var matrixColor = new List<string>(Enumerable.Repeat(x, yLength));
         var xM = Enumerable.Repeat(new KeyValuePair<int, int>(-1, -1), yLength);
         var matrix = new List<List<KeyValuePair<int, int>>>();
         for (int i = 0; i < xLength; i++)
@@ -203,12 +244,12 @@ class Solution
             var temp = matrix[dX][dY];
             dX = temp.Key;
             dY = temp.Value;
-            if(dX == startX && dY == startY)
+            if (dX == startX && dY == startY)
             {
                 break;
             }
         }
-       
+
         return count;
     }
 

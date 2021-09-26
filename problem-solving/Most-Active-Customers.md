@@ -2,7 +2,6 @@
 
 **Solution**
 ```
-    This is a wikipedia solution: https://en.wikipedia.org/wiki/Longest_common_subsequence_problem 
     static List<string> mostActive(List<string> customers)
     {
         var cDic = new Dictionary<string, int>();
