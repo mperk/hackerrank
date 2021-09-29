@@ -36,7 +36,7 @@ public class MaxAndValue
     }
     public MaxAndValue()
     {
-        
+
     }
 }
 
@@ -44,40 +44,221 @@ class Solution
 {
     static void Main(string[] args)
     {
-        int n = Convert.ToInt32(Console.ReadLine().Trim());
 
-        List<string> ops = new List<string>();
-
-        for (int i = 0; i < n; i++)
+        tSol3(new List<string>() 
         {
-            string opsItem = Console.ReadLine();
-            ops.Add(opsItem);
-        }
+            "photo.jpg, Warsaw, 2013-09-05 14:08:15",
+            "john.png, London, 2015-06-20 15:13:22",
+            "myFriends.png, Warsaw, 2013-09-05 14:07:13",
+            "Eiffel.jpg, Paris, 2015-07-23 08:03:02",
+            "pisatower.jpg, Paris, 2015-07-22 23:59:59",
+            "BOB.jpg, London, 2015-08-05 00:02:03",
+            "notredame.png, Paris, 2015-09-01 12:00:00",
+            "me.jpg, Warsaw, 2013-09-06 15:40:22",
+            "a.png, Warsaw, 2016-02-13 13:33:50",
+            "b.jpg, Warsaw, 2016-01-02 15:12:22",
+            "c.jpg, Warsaw, 2016-01-02 14:34:30",
+            "d.jpg, Warsaw, 2016-01-02 15:15:01",
+            "e.jpg, Warsaw, 2016-01-02 09:49:09",
+            "f.jpg, Warsaw, 2016-01-02 10:55:32",
+            "g.jpg, Warsaw, 2016-02-29 22:13:11",
+        });
+        //tSol2(new int[] {100, 100,-10,-20,-30}, new string[] { "2020-01-01", "2020-02-01", "2020-02-11", "2020-02-05", "2020-02-08" });
 
-        List<int> result = getMax(ops);
+        //int w = Convert.ToInt32(Console.ReadLine().Trim());
 
-        Console.WriteLine(String.Join("\n", result));
+        //int h = Convert.ToInt32(Console.ReadLine().Trim());
 
+        //int isVerticalCount = Convert.ToInt32(Console.ReadLine().Trim());
+
+        //List<bool> isVertical = new List<bool>();
+
+        //for (int i = 0; i < isVerticalCount; i++)
+        //{
+        //    bool isVerticalItem = Convert.ToInt32(Console.ReadLine().Trim()) != 0;
+        //    isVertical.Add(isVerticalItem);
+        //}
+
+        //int distanceCount = Convert.ToInt32(Console.ReadLine().Trim());
+
+        //List<int> distance = new List<int>();
+
+        //for (int i = 0; i < distanceCount; i++)
+        //{
+        //    int distanceItem = Convert.ToInt32(Console.ReadLine().Trim());
+        //    distance.Add(distanceItem);
+        //}
+
+        //List<long> result = getMaxArea(w, h, isVertical, distance);
+
+
+
+        //Console.WriteLine(String.Join(" ", result));
         //foreach (var result in results)
         //{
         //    Console.WriteLine(result);
         //}
         //Console.WriteLine(result);
         //Console.ReadLine();
+    }
 
+    static List<string> tSol3(List<string> S)
+    {
+        var result = new LinkedList<string>();
+        var ss = S.Select(x => x.Split(",").ToList()).Select(x => new PhotoFile(x[0],x[1],x[2]));
+        var subSs = ss.GroupBy(x => x.name).Select(x => new { n = x.Key, l = x.ToList().OrderBy(y => y.date), c = x.Count() });
+
+        foreach (var item in ss)
+        {
+            int c = ss.Count(x => x.where == item.where);
+            var temp = ss.Where(x => x.where == item.where).OrderBy(x => x.date).ToArray();
+            int order = Array.FindIndex(temp, x => x.name == item.name) + 1;
+
+            string ext = item.name.Split(".")[1];
+            if (c >= 10 && order < 10)
+            {
+                result.AddLast(item.where + "0" + order + "." + ext);
+            }
+            else
+            {
+                result.AddLast(item.where + order + "." + ext);
+            }
+        }
+
+        return result.ToList();
+    }
+
+    static int tSol2(int[] A, string[] D)
+    {
+        int result = 0;
+        int fee = 12;
+
+        var dicNeg = new Dictionary<string, int>();
+        var dicNegCount = new Dictionary<string, int>();
+        var dicFeeFlag = new Dictionary<string, bool>();
+        var months = D.Select(x => x.Substring(5, 2)).ToList();
+        for (int i = 0; i < months.Count(); i++)
+        {
+            result += A[i];
+            if (A[i] < 0)
+            {
+                if (dicNeg.ContainsKey(months[i]))
+                {
+                    dicNeg[months[i]] += A[i];
+                    dicNegCount[months[i]]++;
+                }
+                else
+                {
+                    dicNeg[months[i]] = A[i];
+                    dicNegCount[months[i]] = 1;
+                    dicFeeFlag[months[i]] = false;
+                }
+
+                if(dicNegCount[months[i]] >= 3 && dicNeg[months[i]] <= -100 && dicFeeFlag[months[i]] == false)
+                {
+                    fee--;
+                    dicFeeFlag[months[i]] = true;
+                }
+            }
+        }
+        result = result - (fee * 5);
+        
+        return result;
+    }
+
+    static int tSol1(string S)
+    {
+        int max = 0;
+        foreach (var item in S.Split("."))
+        {
+            foreach (var ite in item.Split("!"))
+            {
+                foreach (var i in ite.Split("?"))
+                {
+                    int temp = i.Split(" ").Where(x => !string.IsNullOrEmpty(x)).Count();
+                    if (temp > max)
+                    {
+                        max = temp;
+                    }
+                }
+            }
+        }
+        return max;
+    }
+
+    static List<long> getMaxArea(int w, int h, List<bool> isVertical, List<int> distance)
+    { //not work
+
+        var result = new List<long>();
+        if (isVertical[0])
+        {
+            w = Math.Max(w - distance[0], distance[0]);
+            result.Add(w * h);
+        }
+        else
+        {
+            h = Math.Max(h - distance[0], distance[0]);
+            result.Add(w * h);
+        }
+
+        for (int i = 1; i < distance.Count; i++)
+        {
+            if (isVertical[i])
+            {
+                w = Math.Max(w - distance[i] + distance[i - 1], distance[i] - distance[i - 1]);
+                result.Add(w * h);
+            }
+            else
+            {
+                h = Math.Max(h - distance[i] + distance[i - 1], distance[i] - distance[i - 1]);
+                result.Add(w * h);
+            }
+        }
+
+        return result;
+    }
+
+    static long sortedSum(List<int> a)
+    { //not work
+
+        long result = 0;
+        var sortedList = new SortedList<int>();
+        for (int i = 0; i < a.Count; i++)
+        {
+            sortedList.Add(a[i]);
+            //result =+ sortedList.Select((x,j) => x * j).Sum();
+            for (int j = 0; j < sortedList.Count; j++)
+            {
+                result += (j + 1) * sortedList[j];
+            }
+        }
+        return result;
+    }
+
+    static List<int> rotateLeft(int d, List<int> arr)
+    {
+        d = d % arr.Count();
+        var result = arr.GetRange(d, arr.Count() - d).Concat(arr.GetRange(0, d));
+        return result.ToList();
+    }
+
+    static List<int> reverseArray(List<int> a)
+    {
+        a.Reverse();
+        return a;
     }
 
     static List<int> getMax(List<string> operations)
     {
         var resultMax = new LinkedList<int>();
         var result = new LinkedList<int>();
-       
+
         foreach (var item in operations)
         {
             if (item.StartsWith("1"))
             {
                 int value = Convert.ToInt32(item.Split(' ')[1]);
-                if(resultMax.Count() > 0)
+                if (resultMax.Count() > 0)
                 {
                     value = Math.Max(resultMax.Last(), value);
                 }
@@ -92,7 +273,7 @@ class Solution
             }
             else if (item.StartsWith("3"))
             {
-                if(resultMax.Count() > 0)
+                if (resultMax.Count() > 0)
                 {
                     result.AddLast(resultMax.Last());
                 }
@@ -1197,8 +1378,189 @@ class Solution
         return n.ToString();
     }
 
+    static List<int> compareTriplets(List<int> a, List<int> b)
+    {
+        var result = new List<int>();
+        int aCount = 0;
+        int bCount = 0;
+        for (int i = 0; i < a.Count; i++)
+        {
+            if (a[i] > b[i])
+            {
+                aCount++;
+            }
+            else if (a[i] < b[i])
+            {
+                bCount++;
+            }
+        }
+        result.Add(aCount);
+        result.Add(bCount);
+        return result;
+    }
+
+    static int diagonalDifference(List<List<int>> arr)
+    {
+        int lSum = 0;
+        int rSum = 0;
+        for (int i = 0; i < arr.Count; i++)
+        {
+            lSum += arr[i][i];
+        }
+        for (int i = 0; i < arr.Count; i++)
+        {
+            rSum += arr[i][arr.Count - i - 1];
+        }
+        return Math.Abs(rSum - lSum);
+    }
+
+    static void plusMinus(List<int> arr)
+    {
+        int c = arr.Count();
+        Console.WriteLine(Math.Round((decimal)arr.Where(x => x > 0).Count() / c, 6));
+        Console.WriteLine(Math.Round((decimal)arr.Where(x => x < 0).Count() / c, 6));
+        Console.WriteLine(Math.Round((decimal)arr.Where(x => x == 0).Count() / c, 6));
+    }
+
+    static void staircase(int n)
+    {
+        for (int i = n - 1; i >= 0; i--)
+        {
+            string space = string.Join(string.Empty, Enumerable.Repeat(" ", i));
+            string d = string.Join(string.Empty, Enumerable.Repeat("#", n - i));
+            Console.WriteLine(space + d);
+        }
+    }
+
+    static int birthdayCakeCandles(List<int> candles)
+    {
+        int max = candles.Max();
+        return candles.Count(x => x == max);
+    }
+
+    static void miniMaxSum(List<int> arr)
+    {
+        arr.Sort();
+        long maxSum = arr.GetRange(1, 4).Select(x => (long)x).Sum();
+        long minSum = arr.GetRange(0, 4).Select(x => (long)x).Sum();
+        Console.WriteLine(minSum + " " + maxSum);
+    }
+
+    static string timeConversion(string s)
+    {
+        string result = s.Substring(2, 6);
+        int hour = Convert.ToInt32(s.Substring(0, 2));
+        if (s.Substring(s.Length - 2, 2) == "PM" && hour != 12)
+        {
+            hour += 12;
+        }
+        else if (s.Substring(s.Length - 2, 2) == "AM" && hour == 12)
+        {
+            hour = 0;
+        }
+
+        if (hour > 10)
+        {
+            result = hour + result;
+        }
+        else
+        {
+            result = "0" + hour + result;
+        }
+
+        return result;
+    }
+
+    static List<int> gradingStudents(List<int> grades)
+    {
+        var result = new List<int>();
+        foreach (var item in grades)
+        {
+            if (item < 38)
+            {
+                result.Add(item);
+            }
+            else
+            {
+                int g = 5 - (item % 5);
+                if (g < 3)
+                {
+                    result.Add(item + g);
+                }
+                else
+                {
+                    result.Add(item);
+                }
+            }
+        }
+        return result;
+    }
+
+    static string catAndMouse(int x, int y, int z)
+    {
+        int diffA = Math.Abs(x - z);
+        int diffB = Math.Abs(y - z);
+        if (diffA < diffB)
+        {
+            return "Cat A";
+        }
+        else if (diffA == diffB)
+        {
+            return "Mouse C";
+        }
+        else
+        {
+            return "Cat B";
+        }
+    }
+
+    int getMoneySpent(int[] keyboards, int[] drives, int b)
+    {
+        int result = -1;
+
+        for (int i = 0; i < keyboards.Length; i++)
+        {
+            for (int j = 0; j < drives.Length; j++)
+            {
+                int sum = keyboards[i] + drives[j];
+                if (b >= sum && result < sum)
+                {
+                    result = sum;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    static string angryProfessor(int k, List<int> a)
+    {
+        int arrived = a.Count(x => x <= 0);
+        if (arrived >= k)
+        {
+            return "NO";
+        }
+        else
+        {
+            return "YES";
+        }
+
+    }
+
 }
 
+class PhotoFile
+{
+    public string name { get; set; }
+    public string where { get; set; }
+    public DateTime date { get; set; }
+    public PhotoFile(string n, string w, string d)
+    {
+        name = n;
+        where = w;
+        date = Convert.ToDateTime(d);
+    }
+}
 
 class Point
 {
