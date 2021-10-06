@@ -163,3 +163,36 @@
         return b == 0 ? a : GCD(b, a % b);
     }
 ```
+
+**Breadth-first search and Depth-first search**
+```
+    static void bfs_traversal(Node node)
+    {
+        Queue<Node> q = new Queue<Node>();
+        q.Enqueue(node);
+        while (q.Count > 0)
+        {
+            node = q.Dequeue();
+            Console.WriteLine(node.Data + " ");
+            if(node.Left != null)
+            {
+                q.Enqueue(node.Left);
+            }
+            if(node.Right != null)
+            {
+                q.Enqueue(node.Right);
+            }
+        }
+    }
+
+    static void dfs_traversal(Node node)
+    {
+        if(node == null)
+        {
+            return;
+        }
+        Console.WriteLine(node.Data + " ");
+        dfs_traversal(node.Left);
+        dfs_traversal(node.Right);
+    }
+```
