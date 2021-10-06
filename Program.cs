@@ -44,26 +44,21 @@ class Solution
 {
     static void Main(string[] args)
     {
-
-        tSol3(new List<string>() 
-        {
-            "photo.jpg, Warsaw, 2013-09-05 14:08:15",
-            "john.png, London, 2015-06-20 15:13:22",
-            "myFriends.png, Warsaw, 2013-09-05 14:07:13",
-            "Eiffel.jpg, Paris, 2015-07-23 08:03:02",
-            "pisatower.jpg, Paris, 2015-07-22 23:59:59",
-            "BOB.jpg, London, 2015-08-05 00:02:03",
-            "notredame.png, Paris, 2015-09-01 12:00:00",
-            "me.jpg, Warsaw, 2013-09-06 15:40:22",
-            "a.png, Warsaw, 2016-02-13 13:33:50",
-            "b.jpg, Warsaw, 2016-01-02 15:12:22",
-            "c.jpg, Warsaw, 2016-01-02 14:34:30",
-            "d.jpg, Warsaw, 2016-01-02 15:15:01",
-            "e.jpg, Warsaw, 2016-01-02 09:49:09",
-            "f.jpg, Warsaw, 2016-01-02 10:55:32",
-            "g.jpg, Warsaw, 2016-02-29 22:13:11",
-        });
+        //tSol4(new int[] { 29, 50 }, new int[] { 61, 37 }, new int[] { 37, 70 });
+        //tSol4(new int[] { 29, 29 }, new int[] { 61, 61 }, new int[] { 70, 70 });
+        //tSol4(new int[] { 1, 5, 46, 37, 103 }, new int[] { 44, 66 }, new int[] { 29, 36, 65, 100 });
+        //minRouterPeripherality(new int[] { 9, 1, 4, 9, 0, 4, 8, 9, 0, 1 });
         //tSol2(new int[] {100, 100,-10,-20,-30}, new string[] { "2020-01-01", "2020-02-01", "2020-02-11", "2020-02-05", "2020-02-08" });
+
+        string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+
+        int n = Convert.ToInt32(firstMultipleInput[0]);
+
+        int d = Convert.ToInt32(firstMultipleInput[1]);
+
+        List<int> arr = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt32(arrTemp)).ToList();
+
+        int result = beautifulTriplets(d, arr);
 
         //int w = Convert.ToInt32(Console.ReadLine().Trim());
 
@@ -91,21 +86,256 @@ class Solution
 
         //List<long> result = getMaxArea(w, h, isVertical, distance);
 
-
-
         //Console.WriteLine(String.Join(" ", result));
         //foreach (var result in results)
         //{
         //    Console.WriteLine(result);
         //}
-        //Console.WriteLine(result);
+        Console.WriteLine(result);
         //Console.ReadLine();
+
     }
 
+    static int beautifulTriplets(int d, List<int> arr)
+    {
+        int tripletCount = 0;
+        for (int i = 0; i < arr.Count - 2; i++)
+        {
+            int second = arr.IndexOf(arr[i] + d);
+            if (second > -1 && second > i)
+            {
+                int third = arr.IndexOf(arr[i] + d + d);
+                if (third > -1 && third > second)
+                {
+                    tripletCount++;
+                }
+            }
+        }
+        return tripletCount;
+    }
+
+    static long tSol4(int[] a, int[] b, int[] c)
+    {
+        long count = 0L;
+        a = a.OrderBy(x => x).ToArray();
+        b = b.OrderBy(x => x).ToArray();
+        c = c.OrderBy(x => x).ToArray();
+        long aCount = a.Count(x => x < b[0]);
+        c = c.Where(x => x > b[0]).ToArray();
+        long cCount = c.Count();
+        count += aCount * cCount;
+        for (int i = 1; i < b.Length; i++)
+        {
+            while (aCount < a.Length && a[aCount] < b[i])
+            {
+                aCount++;
+            }
+            int j = 0;
+            while (cCount > 0 && c[j] < b[i])
+            {
+                cCount--;
+                j++;
+            }
+            c = c.ToList().GetRange(j, c.Length - j).ToArray();
+            count += aCount * cCount;
+        }
+        return count;
+    }
+
+    static int minRouterPeripherality(int[] T)
+    {
+        Queue<int> queue = new Queue<int>();
+        Queue<int> queue2 = new Queue<int>();
+        HashSet<int> visited = new HashSet<int>();
+        Dictionary<int, List<int>> levelQueue = new Dictionary<int, List<int>>();
+
+        int mainRoute = T.First(x => x == T[x]);
+        queue.Enqueue(mainRoute);
+        queue2.Enqueue(mainRoute);
+        int level = 0;
+        levelQueue[level] = new List<int>() { mainRoute };
+        while (queue.Count > 0)
+        {
+            int levelSize = queue.Count;
+            while(levelSize > 0)
+            {
+                int item = queue.Dequeue();
+                if (visited.Contains(item))
+                    continue;
+                else
+                    visited.Add(item);
+
+                var children = T.Select((value, index) => (value, index)).Where(x => x.value == item).Where(x => !visited.Contains(x.index));
+                foreach (var ii in children)
+                {
+                    queue.Enqueue(ii.index);
+                    queue2.Enqueue(ii.index);
+                }
+
+                levelSize--;
+            }
+            level++;
+            levelQueue[level] = queue.ToList();
+        }
+
+        for (int i = 0; i < T.Length - 1; i++)
+        {
+            for (int j = i + 1; j < T.Length; j++)
+            {
+
+            }
+        }
+
+        return 0;
+    }
+    static int minRouterPeripherality_old(int[] T)
+    {
+        int result = 0;
+        List<double> avgLevel = new List<double>();
+        for (int route = 0; route < T.Length; route++)
+        {
+            List<int> routeLevel = new List<int>();
+           
+            for (int j = 0; j < T.Length; j++)
+            {
+                if (route == j) 
+                {
+                    continue; 
+                }
+                int level = 0;
+                Queue<int> queue = new Queue<int>();
+                HashSet<int> visited = new HashSet<int>();
+
+                queue.Enqueue(route);
+
+                while (queue.Count > 0)
+                {
+                    int levelSize = queue.Count();
+                    while (levelSize > 0)
+                    {
+                        levelSize--;
+                        var item = queue.Dequeue();
+                        if (visited.Contains(item))
+                            continue;
+                        else
+                            visited.Add(item);
+
+                        Console.WriteLine(item);
+                        var children = T.Select((value, index) => (value, index)).Where(x => x.value == item).Where(x => !visited.Contains(x.index));
+                        var parents = T.Select((value, index) => (value, index)).Where(x => x.index == item).Where(x => !visited.Contains(x.value));
+
+                        foreach (var ii in parents)
+                        {
+                            queue.Enqueue(ii.value);
+                        }
+
+                        foreach (var ii in children)
+                        {
+                            queue.Enqueue(ii.index);
+                        }
+
+                        if (queue.Contains(j))
+                        {
+                            queue.Clear();
+                            break;
+                        }
+                    }
+                    level++;
+                }
+                routeLevel.Add(level);
+            }
+            double avg = (double)routeLevel.Sum() / (T.Length - 1);
+            avgLevel.Add(avg);
+        }
+        double min = avgLevel.Min();
+        return Array.FindIndex(avgLevel.ToArray(), x => x == min);    
+    }
+
+    static void bfs_example()
+    {
+        var tree = new Dictionary<int, List<int>>();
+        tree[1] = new List<int> { 2, 3, 4 };
+        tree[2] = new List<int> { 5 };
+        tree[3] = new List<int> { 6, 7 };
+        tree[4] = new List<int> { 8 };
+        tree[5] = new List<int> { 9 };
+        tree[6] = new List<int> { 10 };
+
+        HashSet<int> visited = new HashSet<int>();
+        Queue<int> queue = new Queue<int>();
+        queue.Enqueue(tree.ElementAt(0).Key);
+        while (queue.Count() > 0)
+        {
+            var element = queue.Dequeue();
+            if (visited.Contains(element))
+                continue;
+            else
+                visited.Add(element);
+
+            Console.WriteLine(element);
+
+            List<int> neighbours = new List<int>();
+            tree.TryGetValue(element, out neighbours);
+            foreach (var item in neighbours)
+            {
+                queue.Enqueue(item);
+            }
+        }
+
+    }
+
+    static void bfs_traversal(Node node)
+    {
+        Queue<Node> q = new Queue<Node>();
+        q.Enqueue(node);
+        while (q.Count > 0)
+        {
+            node = q.Dequeue();
+            Console.WriteLine(node.Data + " ");
+            if(node.Left != null)
+            {
+                q.Enqueue(node.Left);
+            }
+            if(node.Right != null)
+            {
+                q.Enqueue(node.Right);
+            }
+        }
+    }
+
+    static void dfs_traversal(Node node)
+    {
+        if(node == null)
+        {
+            return;
+        }
+        Console.WriteLine(node.Data + " ");
+        dfs_traversal(node.Left);
+        dfs_traversal(node.Right);
+    }
+   
     static List<string> tSol3(List<string> S)
     {
+        //tSol3(new List<string>() 
+        //    {
+        //        "photo.jpg, Warsaw, 2013-09-05 14:08:15",
+        //        "john.png, London, 2015-06-20 15:13:22",
+        //        "myFriends.png, Warsaw, 2013-09-05 14:07:13",
+        //        "Eiffel.jpg, Paris, 2015-07-23 08:03:02",
+        //        "pisatower.jpg, Paris, 2015-07-22 23:59:59",
+        //        "BOB.jpg, London, 2015-08-05 00:02:03",
+        //        "notredame.png, Paris, 2015-09-01 12:00:00",
+        //        "me.jpg, Warsaw, 2013-09-06 15:40:22",
+        //        "a.png, Warsaw, 2016-02-13 13:33:50",
+        //        "b.jpg, Warsaw, 2016-01-02 15:12:22",
+        //        "c.jpg, Warsaw, 2016-01-02 14:34:30",
+        //        "d.jpg, Warsaw, 2016-01-02 15:15:01",
+        //        "e.jpg, Warsaw, 2016-01-02 09:49:09",
+        //        "f.jpg, Warsaw, 2016-01-02 10:55:32",
+        //        "g.jpg, Warsaw, 2016-02-29 22:13:11",
+        //    });
         var result = new LinkedList<string>();
-        var ss = S.Select(x => x.Split(",").ToList()).Select(x => new PhotoFile(x[0],x[1],x[2]));
+        var ss = S.Select(x => x.Split(",").ToList()).Select(x => new PhotoFile(x[0], x[1], x[2]));
         var subSs = ss.GroupBy(x => x.name).Select(x => new { n = x.Key, l = x.ToList().OrderBy(y => y.date), c = x.Count() });
 
         foreach (var item in ss)
@@ -154,7 +384,7 @@ class Solution
                     dicFeeFlag[months[i]] = false;
                 }
 
-                if(dicNegCount[months[i]] >= 3 && dicNeg[months[i]] <= -100 && dicFeeFlag[months[i]] == false)
+                if (dicNegCount[months[i]] >= 3 && dicNeg[months[i]] <= -100 && dicFeeFlag[months[i]] == false)
                 {
                     fee--;
                     dicFeeFlag[months[i]] = true;
@@ -162,7 +392,7 @@ class Solution
             }
         }
         result = result - (fee * 5);
-        
+
         return result;
     }
 
@@ -1570,5 +1800,20 @@ class Point
     {
         x = _x;
         y = _y;
+    }
+}
+
+class Node
+{
+    public Node Left { get; set; }
+    public Node Right { get; set; }
+    public string Data { get; set; }
+    public Node(string d)
+    {
+        Data = d;
+    }
+    public Node()
+    {
+            
     }
 }
