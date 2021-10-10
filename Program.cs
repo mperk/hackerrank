@@ -14,6 +14,8 @@ using System;
 using hackerrank;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using hackerrank.csharpCertification;
+using System.Numerics;
 
 public static class Extensions
 {
@@ -44,21 +46,16 @@ class Solution
 {
     static void Main(string[] args)
     {
+        //largestRectangle(new List<int>() { 1, 2, 3, 4, 5 });
+
+
         //tSol4(new int[] { 29, 50 }, new int[] { 61, 37 }, new int[] { 37, 70 });
         //tSol4(new int[] { 29, 29 }, new int[] { 61, 61 }, new int[] { 70, 70 });
         //tSol4(new int[] { 1, 5, 46, 37, 103 }, new int[] { 44, 66 }, new int[] { 29, 36, 65, 100 });
         //minRouterPeripherality(new int[] { 9, 1, 4, 9, 0, 4, 8, 9, 0, 1 });
         //tSol2(new int[] {100, 100,-10,-20,-30}, new string[] { "2020-01-01", "2020-02-01", "2020-02-11", "2020-02-05", "2020-02-08" });
 
-        string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
-
-        int n = Convert.ToInt32(firstMultipleInput[0]);
-
-        int d = Convert.ToInt32(firstMultipleInput[1]);
-
-        List<int> arr = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt32(arrTemp)).ToList();
-
-        int result = beautifulTriplets(d, arr);
+        //longestCommonSubstring("the quick brown fox jumps over the lazy dog", "ghdsgf fjsdfg ghdsfbrown fox jumpshfsdjfg 457877fsdfhb");
 
         //int w = Convert.ToInt32(Console.ReadLine().Trim());
 
@@ -91,9 +88,200 @@ class Solution
         //{
         //    Console.WriteLine(result);
         //}
-        Console.WriteLine(result);
-        //Console.ReadLine();
+        //Console.WriteLine(result);
 
+        //var r = solutionT1("area,land\n3722,CN\n6612,RU\n3855,CA\n3797,USA", "area");
+        Console.ReadLine();
+
+    }
+    static void extraLongFactorials(int n)
+    {
+        BigInteger result = new BigInteger(1);
+        for (int i = 2; i <= n; i++)
+        {
+            result *= i;
+        }
+        Console.WriteLine(result);
+    }
+
+    public int solutionT3(string[] R)
+    {
+        int count = 0;
+        var dic = new Dictionary<string, string>();
+        for (int i = 0; i < R.Length; i++)
+        {
+            for (int j = 0; j < R[i].Length; j++)
+            {
+                if(R[i][j] == '.')
+                {
+                    string key = i.ToString() + "," + j.ToString();
+                    if (!dic.ContainsKey(key))
+                    {
+                        dic.Add(key, key);
+                    }
+                }
+                else
+                {
+                    if()
+                }
+            }
+        }
+        return count;
+    }
+    public Dictionary<string, string> moveRight(Dictionary<string, string> dic, string[] R, string endIndex)
+    {
+        int startI = Int32.Parse(endIndex.Split(',')[0]);
+        int startJ = Int32.Parse(endIndex.Split(',')[1]);
+
+        for (int j = startJ; j < R[startI].Length; j++)
+        {
+            if(R[startI][j] == '.')
+            {
+                string key = startI.ToString() + "," + j.ToString();
+                if (!dic.ContainsKey(key))
+                {
+                    dic.Add(key, key);
+                }
+            }
+            else
+            {
+                return moveDown(dic, R, startI.ToString() + "," + (j - 1).ToString());
+            }
+        }
+        return dic;
+    }
+
+    public Dictionary<string, string> moveDown(Dictionary<string, string> dic, string[] R, string endIndex)
+    {
+        int startI = Int32.Parse(endIndex.Split(',')[0]);
+        int startJ = Int32.Parse(endIndex.Split(',')[1]);
+
+        for (int i = startI + 1; i < R.Length; i++)
+        {
+            if(R[i][startJ] == '.')
+            {
+                string key = i.ToString() + "," + startJ.ToString();
+                if (!dic.ContainsKey(key))
+                {
+                    dic.Add(key, key);
+                }
+            }
+            else
+            {
+                return moveLeft(dic, R, (i-1).ToString() + "," + startJ.ToString());
+            }
+        }
+        return dic;
+    }
+
+    public Dictionary<string, string> moveLeft(Dictionary<string, string> dic, string[] R, string endIndex)
+    {
+        int startI = Int32.Parse(endIndex.Split(',')[0]);
+        int startJ = Int32.Parse(endIndex.Split(',')[1]);
+
+        for (int j = startJ; j >=0; j--)
+        {
+            if (R[startI][j] == '.')
+            {
+                string key = startI.ToString() + "," + j.ToString();
+                if (!dic.ContainsKey(key))
+                {
+                    dic.Add(key, key);
+                }
+            }
+            else
+            {
+                return moveUp(dic, R, startI.ToString() + "," + (j - 1).ToString());
+            }
+        }
+        return dic;
+
+    }
+
+    public Dictionary<string, string> moveUp(Dictionary<string, string> dic, string[] R, string endIndex)
+    {
+        int startI = Int32.Parse(endIndex.Split(',')[0]);
+        int startJ = Int32.Parse(endIndex.Split(',')[1]);
+
+        for (int i = startI + 1; i < R.Length; i++)
+        {
+            if (R[i][startJ] == '.')
+            {
+                string key = i.ToString() + "," + startJ.ToString();
+                if (!dic.ContainsKey(key))
+                {
+                    dic.Add(key, key);
+                }
+            }
+            else
+            {
+                return moveLeft(dic, R, (i - 1).ToString() + "," + startJ.ToString());
+            }
+        }
+        return dic;
+    }
+
+
+    public int solutionT2(int[] A)
+    {
+        int sum = 0;
+        var moveEnd = new List<int>();
+        var negative = new List<int>();
+        for (int i = 0; i < A.Length; i++)
+        {
+            if(A[i] < 0)
+            {
+                int x = negative.BinarySearch(A[i]);
+                negative.Insert((x >= 0) ? x : ~x, A[i]); //add sorted
+            }
+            else
+            {
+                negative.Clear();
+            }
+            sum += A[i];
+            if (sum < 0)
+            {
+                int n = negative.First();
+                sum -= n;
+                moveEnd.Add(n);
+            }
+        }
+        return moveEnd.Count();
+    }
+
+    public static int solutionT1(string S, string C)
+    {
+        var arr = S.Split("\n");
+        var arrWithComma = arr.Select(x => x.Split(","));
+        var index = Array.FindIndex(arrWithComma.ElementAt(0), x => x == C);
+        var result = arrWithComma.Where((v, i) => i != 0).ToList().Select(x => Int32.Parse(x[index])).Max();
+        return result;
+    }
+
+    static int activityNotifications3(List<int> expenditure, int d)
+    {
+        int notification = 0;
+        int median = expenditure[0];
+        List<int> subExpenditure = expenditure.GetRange(0, d);
+        List<int> sortedSubExpenditure = new List<int>(subExpenditure);
+        sortedSubExpenditure.Sort();
+        if(d % 2 != 0)
+        {
+            median = sortedSubExpenditure[(d + 1) / 2];
+        }
+        else
+        {
+            median = (sortedSubExpenditure[d / 2] + sortedSubExpenditure[d / 2 - 1]) / 2;
+        }
+
+        for (int i = d; i < expenditure.Count - 1; i++)
+        {
+            if(expenditure[i] >= median * 2)
+            {
+
+            }
+        }
+        return notification;
     }
 
     static int beautifulTriplets(int d, List<int> arr)
@@ -569,7 +757,7 @@ class Solution
     }
 
     static int minimumMoves(List<string> grid, int startX, int startY, int goalX, int goalY)
-    {
+    { // castle on the grid
         var queue = new LinkedList<KeyValuePair<int, int>>();
         queue.AddLast(new KeyValuePair<int, int>(startX, startY));
         int xLength = grid.First().Length;
@@ -1130,6 +1318,36 @@ class Solution
                     C[i, j] = Math.Max(C[i, j - 1], C[i - 1, j]);
             }
         return C[a.Length, b.Length];
+    }
+
+    static int longestCommonSubstring(string a, string b)
+    {
+        int[,] C = new int[a.Length + 1, b.Length + 1]; // (a, b).Length + 1
+        int max = 0;
+        int end = 0;
+        for (int i = 1; i <= a.Length; i++)
+            for (int j = 1; j <= b.Length; j++)
+            {
+                if (a[i - 1] == b[j - 1])//i-1,j-1
+                {
+                    C[i, j] = C[i - 1, j - 1] + 1;
+                    if(max < C[i, j])
+                    {
+                        max = C[i, j];
+                        end = i;
+                    }
+                    
+                }
+                else
+                    C[i, j] = 0;
+            }
+        string result = "";
+        for (int i = end - max ; i <= end; i++)
+        {
+            result += a[i];
+        }
+        string result2 = a.Substring(end - max, max);
+        return max;
     }
 
     static long substrCount(int n, string s)
