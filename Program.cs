@@ -91,9 +91,64 @@ class Solution
         //Console.WriteLine(result);
 
         //var r = solutionT1("area,land\n3722,CN\n6612,RU\n3855,CA\n3797,USA", "area");
+
+        //nonDivisibleSubset(4, new List<int>() { 19, 10, 12, 10, 24, 25, 22 });
+        nonDivisibleSubset(3, new List<int>() { 1,7,2,4 });
+        nonDivisibleSubset(7, new List<int>() { 278, 576, 496, 727, 410, 124, 338, 149, 209, 702, 282, 718, 771, 575, 436 });
+        //nonDivisibleSubset(6, new List<int>() { 12, 6, 1, 9, 13, 15, 10, 21, 14, 32, 5, 8, 23, 19 });
+
         Console.ReadLine();
 
     }
+
+    static int nonDivisibleSubset(int k, List<int> s)
+    {
+        var dic = new Dictionary<int, int>();
+        foreach (var item in s)
+        {
+            int remainder = item % k;
+            if (dic.ContainsKey(remainder))
+            {
+                dic[remainder]++;
+            }
+            else
+            {
+                dic[remainder] = 1;
+            }
+        }
+        int count = 0;
+
+        if (dic.ContainsKey(0))
+            count++; // only +1
+
+        if(k % 2 == 0 && dic.ContainsKey(k / 2))
+            count++; // only +1
+
+        for (int i = 1; i < k / 2 + 1; i++)
+        {
+            if (i != k - i)
+            {
+                int rem = k - i;
+                if (dic.ContainsKey(i))
+                {
+                    if (dic.ContainsKey(rem))
+                    {
+                        count += Math.Max(dic[i], dic[rem]);
+                    }
+                    else
+                    {
+                        count += dic[i];
+                    }
+                }
+                else if (dic.ContainsKey(rem))
+                {
+                    count += dic[rem];
+                }
+            }
+        } 
+        return count;
+    }
+
     static void extraLongFactorials(int n)
     {
         BigInteger result = new BigInteger(1);
@@ -122,7 +177,7 @@ class Solution
                 }
                 else
                 {
-                    if()
+                    //if()
                 }
             }
         }
