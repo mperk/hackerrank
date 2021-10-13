@@ -92,13 +92,50 @@ class Solution
 
         //var r = solutionT1("area,land\n3722,CN\n6612,RU\n3855,CA\n3797,USA", "area");
 
-        //nonDivisibleSubset(4, new List<int>() { 19, 10, 12, 10, 24, 25, 22 });
-        nonDivisibleSubset(3, new List<int>() { 1,7,2,4 });
-        nonDivisibleSubset(7, new List<int>() { 278, 576, 496, 727, 410, 124, 338, 149, 209, 702, 282, 718, 771, 575, 436 });
-        //nonDivisibleSubset(6, new List<int>() { 12, 6, 1, 9, 13, 15, 10, 21, 14, 32, 5, 8, 23, 19 });
+        biggerIsGreater("adeffmbbeeddbbaa");
+        biggerIsGreater("dkhc");
+        biggerIsGreater("zalqxykemvzzgaka");
+
+        //int T = Convert.ToInt32(Console.ReadLine().Trim());
+        //var results = new List<string>();
+        //for (int TItr = 0; TItr < T; TItr++)
+        //{
+        //    string w = Console.ReadLine();
+
+        //    string result = biggerIsGreater(w);
+        //    results.Add(result);
+        //    //Console.WriteLine(result);
+        //}
+        //Console.WriteLine("---------------Resultssssssssss----------------------");
+        //foreach (var result in results)
+        //{
+        //    Console.WriteLine(result);
+        //}
 
         Console.ReadLine();
 
+    }
+
+    static string biggerIsGreater(string w)
+    {
+        for (int i = w.Length - 1; i > 0; i--)
+        {
+            if (w[i].CompareTo(w[i - 1]) > 0)
+            {
+                string firstPart = w.Substring(0, i - 1);
+                string secondPart = w.Substring(i, w.Length - i);
+                var secondPartOrdered = secondPart.OrderBy(x => x).ToList();
+                var nextBigger = secondPartOrdered.Select((item, index) => new { item, index }).First(x => w[i - 1].CompareTo(x.item) < 0);
+                secondPartOrdered[nextBigger.index] = w[i - 1];
+                var result = firstPart + nextBigger.item + string.Join("", secondPartOrdered);
+
+                if (result == w)
+                    return "no answer";
+                else
+                    return result;
+            }
+        }
+        return "no answer";
     }
 
     static int nonDivisibleSubset(int k, List<int> s)
@@ -121,7 +158,7 @@ class Solution
         if (dic.ContainsKey(0))
             count++; // only +1
 
-        if(k % 2 == 0 && dic.ContainsKey(k / 2))
+        if (k % 2 == 0 && dic.ContainsKey(k / 2))
             count++; // only +1
 
         for (int i = 1; i < k / 2 + 1; i++)
@@ -145,7 +182,7 @@ class Solution
                     count += dic[rem];
                 }
             }
-        } 
+        }
         return count;
     }
 
@@ -167,7 +204,7 @@ class Solution
         {
             for (int j = 0; j < R[i].Length; j++)
             {
-                if(R[i][j] == '.')
+                if (R[i][j] == '.')
                 {
                     string key = i.ToString() + "," + j.ToString();
                     if (!dic.ContainsKey(key))
@@ -190,7 +227,7 @@ class Solution
 
         for (int j = startJ; j < R[startI].Length; j++)
         {
-            if(R[startI][j] == '.')
+            if (R[startI][j] == '.')
             {
                 string key = startI.ToString() + "," + j.ToString();
                 if (!dic.ContainsKey(key))
@@ -213,7 +250,7 @@ class Solution
 
         for (int i = startI + 1; i < R.Length; i++)
         {
-            if(R[i][startJ] == '.')
+            if (R[i][startJ] == '.')
             {
                 string key = i.ToString() + "," + startJ.ToString();
                 if (!dic.ContainsKey(key))
@@ -223,7 +260,7 @@ class Solution
             }
             else
             {
-                return moveLeft(dic, R, (i-1).ToString() + "," + startJ.ToString());
+                return moveLeft(dic, R, (i - 1).ToString() + "," + startJ.ToString());
             }
         }
         return dic;
@@ -234,7 +271,7 @@ class Solution
         int startI = Int32.Parse(endIndex.Split(',')[0]);
         int startJ = Int32.Parse(endIndex.Split(',')[1]);
 
-        for (int j = startJ; j >=0; j--)
+        for (int j = startJ; j >= 0; j--)
         {
             if (R[startI][j] == '.')
             {
@@ -284,7 +321,7 @@ class Solution
         var negative = new List<int>();
         for (int i = 0; i < A.Length; i++)
         {
-            if(A[i] < 0)
+            if (A[i] < 0)
             {
                 int x = negative.BinarySearch(A[i]);
                 negative.Insert((x >= 0) ? x : ~x, A[i]); //add sorted
@@ -320,7 +357,7 @@ class Solution
         List<int> subExpenditure = expenditure.GetRange(0, d);
         List<int> sortedSubExpenditure = new List<int>(subExpenditure);
         sortedSubExpenditure.Sort();
-        if(d % 2 != 0)
+        if (d % 2 != 0)
         {
             median = sortedSubExpenditure[(d + 1) / 2];
         }
@@ -331,7 +368,7 @@ class Solution
 
         for (int i = d; i < expenditure.Count - 1; i++)
         {
-            if(expenditure[i] >= median * 2)
+            if (expenditure[i] >= median * 2)
             {
 
             }
@@ -400,7 +437,7 @@ class Solution
         while (queue.Count > 0)
         {
             int levelSize = queue.Count;
-            while(levelSize > 0)
+            while (levelSize > 0)
             {
                 int item = queue.Dequeue();
                 if (visited.Contains(item))
@@ -438,12 +475,12 @@ class Solution
         for (int route = 0; route < T.Length; route++)
         {
             List<int> routeLevel = new List<int>();
-           
+
             for (int j = 0; j < T.Length; j++)
             {
-                if (route == j) 
+                if (route == j)
                 {
-                    continue; 
+                    continue;
                 }
                 int level = 0;
                 Queue<int> queue = new Queue<int>();
@@ -491,7 +528,7 @@ class Solution
             avgLevel.Add(avg);
         }
         double min = avgLevel.Min();
-        return Array.FindIndex(avgLevel.ToArray(), x => x == min);    
+        return Array.FindIndex(avgLevel.ToArray(), x => x == min);
     }
 
     static void bfs_example()
@@ -535,11 +572,11 @@ class Solution
         {
             node = q.Dequeue();
             Console.WriteLine(node.Data + " ");
-            if(node.Left != null)
+            if (node.Left != null)
             {
                 q.Enqueue(node.Left);
             }
-            if(node.Right != null)
+            if (node.Right != null)
             {
                 q.Enqueue(node.Right);
             }
@@ -548,7 +585,7 @@ class Solution
 
     static void dfs_traversal(Node node)
     {
-        if(node == null)
+        if (node == null)
         {
             return;
         }
@@ -556,7 +593,7 @@ class Solution
         dfs_traversal(node.Left);
         dfs_traversal(node.Right);
     }
-   
+
     static List<string> tSol3(List<string> S)
     {
         //tSol3(new List<string>() 
@@ -1386,18 +1423,18 @@ class Solution
                 if (a[i - 1] == b[j - 1])//i-1,j-1
                 {
                     C[i, j] = C[i - 1, j - 1] + 1;
-                    if(max < C[i, j])
+                    if (max < C[i, j])
                     {
                         max = C[i, j];
                         end = i;
                     }
-                    
+
                 }
                 else
                     C[i, j] = 0;
             }
         string result = "";
-        for (int i = end - max ; i <= end; i++)
+        for (int i = end - max; i <= end; i++)
         {
             result += a[i];
         }
@@ -2087,6 +2124,6 @@ class Node
     }
     public Node()
     {
-            
+
     }
 }
