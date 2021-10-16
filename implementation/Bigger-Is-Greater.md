@@ -2,6 +2,9 @@
 
 **Solution**
 ```
+    //  biggerIsGreater("adeffmbbeeddbbaa");
+    //  biggerIsGreater("dkhc");
+    //  biggerIsGreater("zalqxykemvzzgaka");
     static string biggerIsGreater(string w)
     {
         for (int i = w.Length - 1; i > 0; i--)
