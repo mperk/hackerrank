@@ -48,15 +48,6 @@ class Solution
     {
         //largestRectangle(new List<int>() { 1, 2, 3, 4, 5 });
 
-
-        //tSol4(new int[] { 29, 50 }, new int[] { 61, 37 }, new int[] { 37, 70 });
-        //tSol4(new int[] { 29, 29 }, new int[] { 61, 61 }, new int[] { 70, 70 });
-        //tSol4(new int[] { 1, 5, 46, 37, 103 }, new int[] { 44, 66 }, new int[] { 29, 36, 65, 100 });
-        //minRouterPeripherality(new int[] { 9, 1, 4, 9, 0, 4, 8, 9, 0, 1 });
-        //tSol2(new int[] {100, 100,-10,-20,-30}, new string[] { "2020-01-01", "2020-02-01", "2020-02-11", "2020-02-05", "2020-02-08" });
-
-        //longestCommonSubstring("the quick brown fox jumps over the lazy dog", "ghdsgf fjsdfg ghdsfbrown fox jumpshfsdjfg 457877fsdfhb");
-
         //int w = Convert.ToInt32(Console.ReadLine().Trim());
 
         //int h = Convert.ToInt32(Console.ReadLine().Trim());
@@ -110,12 +101,222 @@ class Solution
         //    Console.WriteLine(result);
         //}
 
-        absolutePermutation(2,1);
-        absolutePermutation(3,0);
-        absolutePermutation(3,2);
-        absolutePermutation(100,2);
+        //queensAttack(5, 0, 4, 3, );
+        
         Console.ReadLine();
 
+    }
+
+    static void almostSorted(List<int> arr)
+    {
+        //almostSorted(new List<int> { 1, 5, 4, 3, 2, 6 });
+        //almostSorted(new List<int> { 2, 3, 5, 7, 41, 13, 17, 19, 23, 29, 31, 37, 11 });
+        //almostSorted(new List<int> { 3,1,2 });
+        int startIndex = -1;
+        int endIndex = -1;
+
+        for (int i = 0; i < arr.Count - 1; i++)
+        {
+            if (arr[i] > arr[i + 1])
+            {
+                startIndex = i;
+                break;
+            }
+        }
+
+        if(startIndex == -1)
+        {
+            Console.WriteLine("yes");
+            return;
+        }
+
+        for (int i = arr.Count - 1; i > 0; i--)
+        {
+            if(arr[i] < arr[i - 1])
+            {
+                endIndex = i;
+                break;
+            }
+        }
+
+        
+
+        var copyArr = new List<int>(arr);
+        int temp = arr[startIndex];
+        arr[startIndex] = arr[endIndex];
+        arr[endIndex] = temp;
+
+        bool trySwap = false;
+        for (int i = 0; i < arr.Count - 1; i++)
+        {
+            if (arr[i] > arr[i + 1])
+            {
+                trySwap = true;
+                break;
+            }
+        }
+
+        if (trySwap)
+        {
+            if (startIndex == 0 && endIndex == arr.Count - 1)
+            {
+                Console.WriteLine("no");
+                return;
+            }
+
+            var reverse = copyArr.GetRange(startIndex, endIndex - startIndex + 1);
+            reverse.Reverse();
+            var firstPart = copyArr.GetRange(0, startIndex);
+            firstPart.AddRange(reverse);
+            var lastPart = copyArr.GetRange(endIndex + 1, arr.Count - endIndex - 1);
+            firstPart.AddRange(lastPart);
+            for (int i = 0; i < firstPart.Count - 1; i++)
+            {
+                if (firstPart[i] > firstPart[i + 1])
+                {
+                    Console.WriteLine("no");
+                    return;
+                }
+            }
+            Console.WriteLine("yes");
+            Console.WriteLine($"reverse {startIndex + 1} {endIndex + 1}");
+        }
+        else
+        {
+            Console.WriteLine("yes");
+            Console.WriteLine($"swap {startIndex + 1} {endIndex + 1}");
+            return;
+        }
+
+        
+
+
+
+        //if (count == 1)
+        //{
+        //    Console.WriteLine("yes");
+        //    Console.WriteLine($"swap {startIndex + 1} {endIndex + 1}");
+        //}
+        //else if (count > 1)
+        //{
+        //    var reverse = copyArr.GetRange(startIndex, endIndex - startIndex + 1);
+        //    reverse.Reverse();
+        //    for (int i = 0; i < reverse.Count - 1; i++)
+        //    {
+        //        if (reverse[i] > reverse[i + 1])
+        //        {
+        //            Console.WriteLine("no");
+        //            return;
+        //        }
+        //    }
+        //    Console.WriteLine("yes");
+        //    Console.WriteLine($"reverse {startIndex + 1} {endIndex + 1}");
+        //}
+
+
+
+        //for (int i = 0; i < arr.Count - 1; i++)
+        //{
+        //    if (arr[i] > arr[i + 1])
+        //    {
+        //        startIndex = i;
+        //        break;
+        //    }
+        //}
+
+
+        //for (int i = arr.Count; i > 0; i--)
+        //{
+        //    if (arr[i] < arr[i - 1])
+        //    {
+        //        endIndex = i;
+        //        break;
+        //    }
+        //}
+    }
+
+    static int queensAttack(int n, int k, int r_q, int c_q, List<List<int>> obstacles)
+    {
+        int result = 0;
+
+        int cross1 = Math.Min(r_q - 1, n - c_q);
+        cross1 += Math.Min(n - r_q, c_q - 1);
+
+        int cross2 = n - Math.Max(r_q, c_q);
+        cross2 += Math.Min(r_q, c_q) - 1;
+
+        //int cross1 = n - Math.Max(r_q, c_q);
+        //cross1 += Math.Min(r_q, c_q) - 1;
+
+        //int cross2 = Math.Min(n - r_q, r_q - 1);
+        //cross2 += Math.Min(n - c_q, c_q - 1);
+
+        int vertical = n - 1;
+
+        int horizontal = n - 1;
+
+        int obsTotal = 0;
+        foreach (var item in obstacles)
+        {
+            if (item[1] == c_q)
+            {
+                //vertical
+                if (item[0] > r_q)
+                {
+                    obsTotal += n - item[0] + 1;
+                }
+                else
+                {
+                    obsTotal += item[0];
+                }
+            }
+            else if (item[0] == r_q)
+            {
+                //horizontal
+                if (item[1] < c_q)
+                {
+                    obsTotal += item[1];
+                }
+                else
+                {
+                    obsTotal += n - item[1] + 1;
+                }
+            }
+            else if (Math.Abs(r_q - c_q) == Math.Abs(item[0] - item[1]) || Math.Abs(r_q - item[0]) == Math.Abs(c_q - item[1]))
+            {
+                //cross
+                obsTotal += Math.Min(Math.Min(item[0], item[1]) - 1, n - Math.Max(item[0], item[1])) + 1;
+            }
+            //else if (Math.Abs(r_q - c_q) == Math.Abs(item[0] - item[1]))
+            //{
+            //    //cross1
+            //    if (r_q > item[0])
+            //    {
+            //        obsTotal += Math.Min(item[0], item[1]);
+            //    }
+            //    else
+            //    {
+            //        obsTotal += n - Math.Max(item[0], item[1]) + 1;
+            //    }
+            //}
+            //else if (Math.Abs(r_q - item[0]) == Math.Abs(c_q - item[1]))
+            //{
+            //    //cross2
+            //    if(r_q > item[0])
+            //    {
+            //        obsTotal += n - item[0] + 1;
+            //    }
+            //    else
+            //    {
+            //        obsTotal += n - item[1] + 1;
+            //    }
+            //}
+
+
+        }
+        result = cross1 + cross2 + vertical + horizontal - obsTotal;
+
+        return result;
     }
 
     static List<int> absolutePermutation(int n, int k)
@@ -125,21 +326,21 @@ class Solution
         {
             int diff = i - k;
             if (diff > 0 && !dic.ContainsKey(diff))
-                dic.Add(diff,diff);
+                dic.Add(diff, diff);
             else
             {
                 int sum = i + k;
-                if(sum > n)
+                if (sum > n)
                 {
                     dic.Clear();
-                    dic.Add(-1,-1);
+                    dic.Add(-1, -1);
                     break;
                 }
                 else
-                    dic.Add(sum,sum);
+                    dic.Add(sum, sum);
             }
         }
-        return dic.Select(x=>x.Key).ToList();
+        return dic.Select(x => x.Key).ToList();
     }
 
     static string biggerIsGreater(string w)
