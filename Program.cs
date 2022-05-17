@@ -83,8 +83,6 @@ class Solution
 
         //var r = solutionT1("area,land\n3722,CN\n6612,RU\n3855,CA\n3797,USA", "area");
 
-
-
         //int T = Convert.ToInt32(Console.ReadLine().Trim());
         //var results = new List<string>();
         //for (int TItr = 0; TItr < T; TItr++)
@@ -101,10 +99,47 @@ class Solution
         //    Console.WriteLine(result);
         //}
 
-        //queensAttack(5, 0, 4, 3, );
-        
+
+        //lilysHomework(new List<int>() { 12, 15, 13, 11 });
+        minNotOccurPositiveNumber(new List<int>() { 1, 2, 3 }.ToArray());
         Console.ReadLine();
 
+    }
+
+    static int minNotOccurPositiveNumber(int[] A)
+    {
+        var positive = A.Where(x => x > 0).ToArray();
+        Array.Sort(positive);
+
+        int result = 1;
+        for (int i = 0; i < positive.Length; i++)
+        {
+            if (result < positive[i]) return result;
+            result = positive[i] + 1;
+        }
+        return result;
+    }
+
+    static int lilysHomework(List<int> arr)
+    {
+        var sortedArr = new List<int>(arr);
+        sortedArr.Sort();
+        int count = 0;
+
+        var tempArr = new List<int>(arr);
+        for (int i = 0; i < arr.Count; i++)
+        {
+            if (sortedArr[i] == arr[i])
+                continue;
+            int index = sortedArr.IndexOf(arr[i]);
+
+            int temp = tempArr[index];
+            tempArr[index] = arr[i];
+            tempArr[i] = temp;
+            count++;
+        }
+
+        return count;
     }
 
     static void almostSorted(List<int> arr)
@@ -124,7 +159,7 @@ class Solution
             }
         }
 
-        if(startIndex == -1)
+        if (startIndex == -1)
         {
             Console.WriteLine("yes");
             return;
@@ -132,14 +167,14 @@ class Solution
 
         for (int i = arr.Count - 1; i > 0; i--)
         {
-            if(arr[i] < arr[i - 1])
+            if (arr[i] < arr[i - 1])
             {
                 endIndex = i;
                 break;
             }
         }
 
-        
+
 
         var copyArr = new List<int>(arr);
         int temp = arr[startIndex];
@@ -187,52 +222,6 @@ class Solution
             Console.WriteLine($"swap {startIndex + 1} {endIndex + 1}");
             return;
         }
-
-        
-
-
-
-        //if (count == 1)
-        //{
-        //    Console.WriteLine("yes");
-        //    Console.WriteLine($"swap {startIndex + 1} {endIndex + 1}");
-        //}
-        //else if (count > 1)
-        //{
-        //    var reverse = copyArr.GetRange(startIndex, endIndex - startIndex + 1);
-        //    reverse.Reverse();
-        //    for (int i = 0; i < reverse.Count - 1; i++)
-        //    {
-        //        if (reverse[i] > reverse[i + 1])
-        //        {
-        //            Console.WriteLine("no");
-        //            return;
-        //        }
-        //    }
-        //    Console.WriteLine("yes");
-        //    Console.WriteLine($"reverse {startIndex + 1} {endIndex + 1}");
-        //}
-
-
-
-        //for (int i = 0; i < arr.Count - 1; i++)
-        //{
-        //    if (arr[i] > arr[i + 1])
-        //    {
-        //        startIndex = i;
-        //        break;
-        //    }
-        //}
-
-
-        //for (int i = arr.Count; i > 0; i--)
-        //{
-        //    if (arr[i] < arr[i - 1])
-        //    {
-        //        endIndex = i;
-        //        break;
-        //    }
-        //}
     }
 
     static int queensAttack(int n, int k, int r_q, int c_q, List<List<int>> obstacles)
