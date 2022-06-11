@@ -1,11 +1,11 @@
 ﻿using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Linq;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
@@ -101,9 +101,548 @@ class Solution
 
 
         //lilysHomework(new List<int>() { 12, 15, 13, 11 });
-        minNotOccurPositiveNumber(new List<int>() { 1, 2, 3 }.ToArray());
+
+        //minNotOccurPositiveNumber(new List<int>() { 1, 2, 3 }.ToArray());
+
+        //BoundedSlice(2, new List<int>() { 3, 5, 7, 6, 3 }.ToArray());
+        //BoundedSlice(0, new List<int>() { 1000000000 , 1000000000 }.ToArray());
+
+        //var a = new Something();
+
+        //Console.WriteLine(OddOccurrencesInArray(new List<int> { 9, 3, 9, 3, 9, 7, 9 }.ToArray()));
+
+        //Console.WriteLine(binary_gap(32));
+        //Console.WriteLine(cyclic_rotation(new int[] {  }, 3));
+
+        //Console.WriteLine(frog_jmp(10, 85, 30));
+
+        //Console.WriteLine(perm_missing_elem(new int[] { 2, 3, 1, 5}));
+
+        //Console.WriteLine(tape_equilibrium(new int[] { 3, 1, 2, 4, 3 }));
+
+        //Console.WriteLine(perm_check(new int[] { 4, 1 }));
+
+        //Console.WriteLine(passing_cars(new int[] { 0, 0, 1, 1, 0 }));
+
+        //Console.WriteLine(frog_river_one(5, new int[] { 1, 3, 1, 4, 2, 3, 5, 4 }));
+
+        //Console.WriteLine(distinct_sort(new int[] { 2, 1, 1, 2, 3, 1 }));
+
+        //Console.WriteLine(max_product_of_three(new int[] { -3, 1, 2, -2, 5, 6 }));
+
+        //Console.WriteLine(triangle(new int[] { 10, 2, 5, 1, 8, 20 }));
+
+        //Console.WriteLine(brackets("{[()()]}"));
+        //Console.WriteLine(brackets("{([)()]"));
+
+        //Console.WriteLine(fish(new int[] { 4, 3, 2, 1, 5 }, new int[] { 0, 1, 0, 0, 0 }));
+
+        //Console.WriteLine(nesting("(()(())())"));
+
+        //Console.WriteLine(dominator(new int[] { 3, 4, 3, 2, 3, -1, 3, 3 }));
+
+        //Console.WriteLine(equi_leader(new int[] {-1,-1}));
+
+        //Console.WriteLine(max_profit(new int[] { 23171, 21011, 21123, 21366, 21013, 21367 }));
+
+        //Console.WriteLine(max_slice_sum(new int[] { 3, 2, -6, 4, 0 }));
+
+        //Console.WriteLine(count_factors(25));
+
+        //Console.WriteLine(min_perimeter_rectangle(30));
+
+        //Console.WriteLine(chocolates_by_numbers(12, 8));
+
+        //Console.WriteLine(abs_distinct(new int[] { -2147483648, 0 }));
+
+        //Console.WriteLine(count_distinct_slices(6, new int[] { 3, 4, 5, 5, 2}));
+
+        //Console.WriteLine(count_triangles(new int[] { 10, 2, 5, 1, 8, 12 }));
+
+        //Console.WriteLine(max_nonoverlapping_segments(new int[] { 1, 3, 7, 9, 9 }, new int[] { 5, 6, 8, 9, 10 }));
+
+        //Console.WriteLine(tie_ropes(4, new int[] { 1, 2, 3, 4, 1, 1, 3 }));
+
+        //Console.WriteLine(challenge_bug_wars(new int[] { 0, 1, 0, 1, 1, 1, 0 }, new int[] { 1, 2, 3, 4, 5, 6, 7 }));
+
         Console.ReadLine();
 
+    }
+
+    //static int challenge_bug_wars(int[] A, int[] X)
+    //{
+    //    int count = 1;
+    //    int fuel = 0;
+    //    for (int i = 0; i < X.Length - 1; i++)
+    //    {
+    //        if (A[i] != 0)
+    //        {
+    //            fuel += A[i];
+    //            fuel -= Math.Abs(X[i + 1] - X[i]);
+    //            fuel += A[i + 1];
+    //            if (fuel > 0) count++;
+    //        }
+    //    }
+
+    //    return count;
+    //}
+
+    static int tie_ropes(int K, int[] A)
+    {
+        long tempSum = 0;
+        int result = 0;
+        for (int i = 0; i < A.Length; i++)
+        {
+            tempSum += A[i];
+            if (tempSum >= K)
+            {
+                tempSum = 0;
+                result++;
+            }
+        }
+        return result;
+    }
+
+    static int max_nonoverlapping_segments(int[] A, int[] B)
+    {
+        int nonOverlap = 0;
+        int last = -1;
+        for (int i = 0; i < A.Length; i++)
+        {
+            if ((last < 0) || (A[i] > B[last]))
+            {
+                last = i;
+                ++nonOverlap;
+            }
+
+        }
+
+        return nonOverlap;
+    }
+
+    static int count_triangles(int[] A)
+    {
+        int triangles = 0;
+        Array.Sort(A);
+        for (int i = 0; i < A.Length - 2; i++)
+        {
+            int k = i + 2;
+            for (int j = i +1; j < A.Length - 1; j++)
+            {
+                while (k < A.Length && A[i] + A[j] > A[k] && A[j] + A[k] > A[i] && A[k] + A[i] > A[j])
+                    k++;
+
+                triangles += k - j - 1;
+                
+            }
+        }
+        return triangles;
+    }
+
+    static int count_distinct_slices(int M, int[] A)
+    {
+        // i dont understand the question.
+        return 0;
+    }
+
+    static int abs_distinct(int[] A)
+    {
+        HashSet<long> stack = new HashSet<long>();
+        for (int i = 0; i < A.Length; i++)
+        {
+            long abs = Math.Abs((long)A[i]);
+            if (!stack.Contains(abs))
+                stack.Add(abs);
+        }
+        return stack.Count;
+    }
+
+    static int chocolates_by_numbers(int N, int M)
+    {
+        return N / gcd_chocolates_by_numbers(N, M);
+    }
+
+    //greatest common divisor
+    static int gcd_chocolates_by_numbers(int a, int b)
+    {
+        if (a % b == 0) return b;
+        else return gcd_chocolates_by_numbers(b, a % b);
+    }
+
+    static int min_perimeter_rectangle(int N)
+    {
+        int minPerimeter = Int32.MaxValue;
+        for (int i = 1; i < Math.Sqrt(N); i++)
+        {
+            if(N % i == 0)
+            {
+                int tempPerimeter = 2 * (i + (N / i));
+                if (tempPerimeter < minPerimeter) minPerimeter = tempPerimeter;
+            }
+        }
+
+        var sqrt = Math.Sqrt(N);
+        if (sqrt % 1 == 0)
+        {
+            int sqrtInt = (int)sqrt;
+            int tempPerimeter = 2 * (sqrtInt + sqrtInt);
+            if (tempPerimeter < minPerimeter) minPerimeter = tempPerimeter;
+        }
+
+        return minPerimeter;
+    }
+
+    static int count_factors(int N)
+    {
+        var result = 0;
+        for (int i = 1; i < Math.Sqrt(N); i++)
+        {
+            if (N % i == 0)
+                result+=2;
+        }
+
+        // check exact square
+        if (Math.Sqrt(N) % 1 == 0)
+            result++;
+
+        return result;
+    }
+
+    static int max_slice_sum(int[] A)
+    {
+        int max = A[0];
+        int previousMax = A[0];
+        for (int i = 1; i < A.Length; i++)
+        {
+            previousMax = Math.Max(A[i], previousMax + A[i]);
+            max = Math.Max(previousMax, max);
+        }
+        return max;
+    }
+
+    static int max_profit(int[] A)
+    {
+        int maxProfit = 0;
+        int min = Int32.MaxValue;
+        for (int i = 0; i < A.Length; i++)
+        {
+            min = Math.Min(min, A[i]);
+            maxProfit = Math.Max(maxProfit, A[i] - min);
+        }
+        return maxProfit;
+    }
+
+    static int equi_leader(int[] A)
+    {
+        Dictionary<int, int> equiFirst = new Dictionary<int, int>();
+        for (int i = 0; i < A.Length; i++)
+        {
+            if (equiFirst.ContainsKey(A[i]))
+                equiFirst[A[i]]++;
+            else
+                equiFirst[A[i]] = 1;
+        }
+
+        int result = 0;
+        Dictionary<int, int> equiSecond = new Dictionary<int, int>();
+        for (int i = 0; i < A.Length - 1; i++)
+        {
+            if (equiSecond.ContainsKey(A[i]))
+                equiSecond[A[i]]++;
+            else
+                equiSecond[A[i]] = 1;
+
+            if (equiFirst.ContainsKey(A[i]))
+                equiFirst[A[i]]--;
+            //else
+            //    equiAll[A[i]] = 0;
+
+            var firstLeader = equiFirst.FirstOrDefault(x => x.Value == equiFirst.Values.Max());
+            var secondLeader = equiSecond.FirstOrDefault(x => x.Value == equiSecond.Values.Max());
+            if (firstLeader.Key != 0 && secondLeader.Key != 0)
+                if (firstLeader.Value > equiFirst.Values.Sum() / 2 && secondLeader.Value > equiSecond.Values.Sum() / 2)
+                    if (firstLeader.Key == secondLeader.Key)
+                        result++;
+
+        }
+
+        return result;
+    }
+
+
+    static int dominator(int[] A)
+    {
+        Dictionary<int, int> count = new Dictionary<int, int>();
+
+        for (int i = 0; i < A.Length; i++)
+        {
+            if (count.ContainsKey(A[i]))
+                count[A[i]]++;
+            else
+                count[A[i]] = 1;
+        }
+        var result = count.Where(x => x.Value > A.Length / 2).FirstOrDefault();
+        return result.Key == 0 ? -1 : Array.IndexOf(A, result.Key);
+    }
+
+    static int nesting(string S)
+    {
+        Stack<string> strings = new Stack<string>();
+        Dictionary<string, string> map = new Dictionary<string, string>();
+        map.Add("(", ")");
+        for (int i = 0; i < S.Length; i++)
+        {
+            if (S[i].ToString() == "(")
+                strings.Push("(");
+            else
+            {
+                if (strings.Count > 0 && strings.Peek() == "(")
+                    strings.Pop();
+                else
+                    return 0;
+            }
+        }
+
+        if (strings.Count > 0) return 0;
+        else return 1;
+    }
+
+    static int fish(int[] A, int[] B)
+    {
+        Stack<int> alives = new Stack<int>();
+        for (int i = 0; i < A.Length; i++)
+        {
+            if (alives.Count == 0)
+                alives.Push(i);
+            else
+            {
+                while (alives.Count != 0 && B[i] - B[alives.Peek()] == -1 && A[alives.Peek()] < A[i])
+                    alives.Pop();
+
+                if (alives.Count == 0)
+                {
+                    alives.Push(i);
+                }
+                else
+                {
+                    if (B[i] - B[alives.Peek()] != -1)
+                        alives.Push(i);
+                }
+            }
+        }
+        return alives.Count;
+    }
+
+    static int brackets(String S)
+    {
+        Dictionary<string, string> pairs = new Dictionary<string, string>();
+        pairs.Add("{", "}");
+        pairs.Add("[", "]");
+        pairs.Add("(", ")");
+        List<string> set = new List<string>();
+        for (int i = 0; i < S.Length; i++)
+        {
+            if (S[i].ToString() == "{" || S[i].ToString() == "[" || S[i].ToString() == "(")
+                set.Add(S[i].ToString());
+            else
+            {
+                if (set.Count == 0) return 0;
+                string last = set.LastOrDefault();
+                if (S[i].ToString() != pairs[last])
+                    return 0;
+                set.RemoveAt(set.Count - 1);
+            }
+        }
+        if (set.Count > 0) return 0;
+        else return 1;
+    }
+
+    static int triangle(int[] A)
+    {
+        /** https://stackoverflow.com/a/53144072/3110319
+         * Since the array is sorted A[i + 2] is always greater or equal to previous values
+         * So A[i + 2] + A[i] > A[i + 1] ALWAYS
+         * As well ass A[i + 2] + A[i + 1] > A[i] ALWAYS
+         * Therefore no need to check those. We only need to check if A[i] + A[i + 1] > A[i + 2]?
+         * Since in case of A[i] + A[i + 1] > MAXINT the code would strike an overflow (ie the result will be greater than allowed integer limit)
+         * We'll modify the formula to an equivalent A[i] > A[i + 2] - A[i + 1]
+         * And inspect it there
+         */
+
+        if (A.Length < 3) return 0;
+        Array.Sort(A);
+        for (int i = 0; i < A.Length - 2; i++)
+        {
+            if (A[i] + A[i + 1] > A[i + 2])
+                return 1;
+        }
+        return 0;
+    }
+
+    static int max_product_of_three(int[] A)
+    {
+        int count = A.Length;
+        if (count == 3) return A.Aggregate((x, y) => x * y);
+        var l = A.ToList();
+        l.Sort();
+        int max1 = l[count - 3] * l[count - 2] * l[count - 1];
+        int max2 = l[0] * l[1] * l[count - 1];
+        if (max1 > max2) return max1;
+        else return max2;
+    }
+
+    static int distinct_sort(int[] A)
+    {
+        return A.Distinct().Count();
+    }
+
+    static int frog_river_one(int X, int[] A)
+    {
+        var temp = new HashSet<int>();
+        for (int i = 0; i < A.Length; i++)
+        {
+            if (!temp.Contains(A[i]))
+            {
+                temp.Add(A[i]);
+                if (temp.Count == X) { return i; }
+            }
+        }
+        return -1;
+    }
+
+    static int passing_cars(int[] A)
+    {
+        int max = 1000000000;
+        var eCount = 0;
+        var pairsCount = 0;
+
+        for (int i = 0; i < A.Length; i++)
+        {
+            if (A[i] == 0)
+            {
+                eCount++;
+            }
+            else
+            {
+                pairsCount += eCount;
+                if (pairsCount > max) return -1;
+            }
+        }
+
+        return pairsCount;
+    }
+
+    public static int perm_check(int[] A)
+    {
+        if (A.Length == 0) return 0;
+        if (A.Length == 1 && A[0] != 1) return 0;
+        else if (A.Length == 1 && A[0] == 1) return 1;
+
+        var l = A.ToList();
+        l.Sort();
+        if (l[0] != 1) return 0;
+        for (int i = 0; i < l.Count - 1; i++)
+        {
+            if (l[i + 1] - l[i] != 1) return 0;
+        }
+
+        return 1;
+    }
+
+    public static int tape_equilibrium(int[] A)
+    {
+        long first = A[0];
+        long second = A.Skip(1).Sum();
+        int min = (int)Math.Abs(first - second);
+        for (int i = 1; i < A.Length - 1; i++)
+        {
+            first += A[i];
+            second -= A[i];
+            var diff = (int)Math.Abs(first - second);
+            if (diff < min) min = diff;
+        }
+
+        return min;
+    }
+
+    public static int perm_missing_elem(int[] A)
+    {
+        long n = A.Length + 1;
+        long sum = (n * (n + 1)) / 2;
+        long sumA = A.Sum(v => (long)v);
+        int miss = (int)(sum - sumA);
+        return miss;
+    }
+
+    public static int frog_jmp(int X, int Y, int D)
+    {
+        if ((Y - X) % D == 0) return (Y - X) / D;
+        else return (Y - X) / D + 1;
+    }
+
+    public static int[] cyclic_rotation(int[] A, int K)
+    {
+        if (A.Count() == 0) return A;
+        List<int> aList = new List<int>(A);
+        for (int i = 0; i < K; i++)
+        {
+            int t = aList.Last();
+            aList.Insert(0, t);
+            aList.RemoveAt(aList.Count - 1);
+        }
+        return aList.ToArray();
+    }
+
+    public static int binary_gap(int N)
+    {
+        int result = 0;
+
+        result = Convert.ToString(N, 2)
+            .Trim('0')
+            .Split(new[] { '1' })
+            .Max(x => x.Length);
+
+        return result;
+    }
+
+    public static int OddOccurrencesInArray(int[] A)
+    {
+        var odd = A.GroupBy(x => x).First(x => x.Count() % 2 == 1).Key;
+        return odd;
+    }
+
+    static int GetTopSecret(Something something)
+    {
+        var bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+        var field = something.GetType().GetField("topSecretValue", bindingFlags);
+        var result = (int)field?.GetValue(something);
+        return result;
+    }
+
+    public sealed class Something
+    {
+        public Something()
+        {
+            topSecretValue = 42;
+        }
+        private int topSecretValue;
+    }
+
+    static int BoundedSlice(int K, int[] A)
+    {
+        int result = 0;
+        //var resultList = new List<(int, int)>();
+        for (int i = 0; i < A.Length; i++)
+        {
+            int last = i + K > A.Length - 1 ? A.Length - 1 : i + K;
+            for (int j = i; j <= last; j++)
+            {
+                if (Math.Abs(A[i] - A[j]) <= K)
+                    result++;
+            }
+        }
+
+        return result;
     }
 
     static int minNotOccurPositiveNumber(int[] A)
@@ -910,6 +1449,25 @@ class Solution
             }
         }
         return max;
+    }
+
+    // Greatest Common Factor 
+    static int gcf(int a, int b)
+    {
+        return (b == 0 ? a : gcf(b, a % b));
+        //while (b != 0)
+        //{
+        //    int temp = b;
+        //    b = a % b;
+        //    a = temp;
+        //}
+        //return a;
+    }
+
+    // Least Common Multiple 
+    static int lcm(int a, int b)
+    {
+        return (a / gcf(a, b)) * b;
     }
 
     static List<long> getMaxArea(int w, int h, List<bool> isVertical, List<int> distance)
@@ -2226,6 +2784,17 @@ class Solution
 
         return result;
     }
+
+//    def solution(A):
+//    # write your code in Python 3.6
+//    n = len(A)
+//    dp = [0] * n
+//    dp[0] = A[0]
+//    for i in range(1, n) :
+//        dp[i] = max(A[i], A[i]+dp[i - 1])
+//    return max(dp)
+
+//# MaxNonnegSliceSum
 
     static List<int> gradingStudents(List<int> grades)
     {
