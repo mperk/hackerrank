@@ -165,9 +165,97 @@ class Solution
 
         //Console.WriteLine(challenge_bug_wars(new int[] { 0, 1, 0, 1, 1, 1, 0 }, new int[] { 1, 2, 3, 4, 5, 6, 7 }));
 
+        //Console.WriteLine(Flipgame(new int[] { 1, 1 }, new int[] { 1, 2 }));
+
+        //Console.WriteLine(MinReorder(6, new int[][] { new int[] { 0, 1 }, new int[] { 1, 3 }, new int[] { 2, 3 }, new int[] { 4, 0 }, new int[] { 4, 5 } }));
+        //Console.WriteLine(MinReorder(4, new int[][] { new int[] { 0, 1 }, new int[] { 2, 0 }, new int[] { 3,2 } }));
+
+
+
         Console.ReadLine();
 
     }
+
+    
+
+    static int MinReorder(int n, int[][] connections)
+    {
+        int reorder = 0;
+        var connectionsList = connections.ToList();
+        var connected = new List<int[]>();
+        var subConnections = connectionsList.Where(x => x[1] == 0).ToList();
+        connectionsList = connectionsList.Where(x => x[1] != 0).ToList();
+        connected.AddRange(subConnections);
+        int i = 0;
+        while (connectionsList.Count() > 0)
+        {
+            if (!connected.Any(x => x[0] == connectionsList[i][1]))
+            {
+                connected.Add(new int[] { connectionsList[i][1], connectionsList[i][0] });
+                connectionsList.RemoveAt(i);
+                reorder++;
+            }
+            else
+            {
+                connected.Add(new int[] { connectionsList[i][0], connectionsList[i][1] });
+                connectionsList.RemoveAt(i);
+            }
+        }
+
+        return reorder;
+    }
+
+    static int calcRecursiveConnections(int goal, int[][] connections)
+    {
+        int result = 0;
+        var subConnections = connections.Where(x => x[1] == goal);
+        //result += subConnections.Count();
+        foreach (var item in subConnections)
+        {
+            int t = item[0];
+            item[0] = item[1];
+            item[1] = item[0];
+            result++;
+            //result += calcRecursiveConnections(item, connections);
+        }
+        return result;
+    }
+
+    //static int Flipgame(int[] fronts, int[] backs)
+    //{
+    //    int min = 2001;
+    //    for (int i = 0; i < fronts.Length; i++)
+    //    {
+    //        int temp = Math.Min(fronts[i], backs[i]);
+    //        if (fronts[i] < backs[i] && temp < min)
+    //        {
+    //            int t = fronts[i];
+    //            fronts[i] = backs[i];
+    //            backs[i] = t;
+    //            break;
+    //        }
+    //    }
+
+    //    HashSet<int> discard = new HashSet<int>();
+    //    for (int i = 0; i < fronts.Length; i++)
+    //    {
+    //        if(fronts[i] == backs[i])
+    //        {
+    //            discard.Add(backs[i]);
+    //        }
+    //    }
+
+    //    for (int i = 0; i < backs.Length; i++)
+    //    {
+    //        int temp = Math.Min(fronts[i], backs[i]);
+    //        if (!fronts.Contains(backs[i]) && min > temp && )
+    //            min = backs[i];
+    //    }
+
+
+    //    if (min == 2001) return 0;
+    //    return min;
+    //}
 
     //static int challenge_bug_wars(int[] A, int[] X)
     //{
@@ -227,13 +315,13 @@ class Solution
         for (int i = 0; i < A.Length - 2; i++)
         {
             int k = i + 2;
-            for (int j = i +1; j < A.Length - 1; j++)
+            for (int j = i + 1; j < A.Length - 1; j++)
             {
                 while (k < A.Length && A[i] + A[j] > A[k] && A[j] + A[k] > A[i] && A[k] + A[i] > A[j])
                     k++;
 
                 triangles += k - j - 1;
-                
+
             }
         }
         return triangles;
@@ -274,7 +362,7 @@ class Solution
         int minPerimeter = Int32.MaxValue;
         for (int i = 1; i < Math.Sqrt(N); i++)
         {
-            if(N % i == 0)
+            if (N % i == 0)
             {
                 int tempPerimeter = 2 * (i + (N / i));
                 if (tempPerimeter < minPerimeter) minPerimeter = tempPerimeter;
@@ -298,7 +386,7 @@ class Solution
         for (int i = 1; i < Math.Sqrt(N); i++)
         {
             if (N % i == 0)
-                result+=2;
+                result += 2;
         }
 
         // check exact square
@@ -2785,16 +2873,16 @@ class Solution
         return result;
     }
 
-//    def solution(A):
-//    # write your code in Python 3.6
-//    n = len(A)
-//    dp = [0] * n
-//    dp[0] = A[0]
-//    for i in range(1, n) :
-//        dp[i] = max(A[i], A[i]+dp[i - 1])
-//    return max(dp)
+    //    def solution(A):
+    //    # write your code in Python 3.6
+    //    n = len(A)
+    //    dp = [0] * n
+    //    dp[0] = A[0]
+    //    for i in range(1, n) :
+    //        dp[i] = max(A[i], A[i]+dp[i - 1])
+    //    return max(dp)
 
-//# MaxNonnegSliceSum
+    //# MaxNonnegSliceSum
 
     static List<int> gradingStudents(List<int> grades)
     {
